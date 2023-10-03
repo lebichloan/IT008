@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bai1.4", "Bai1.4\Bai1.4.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bai1.5", "Bai1.5\Bai1.5.csproj", "{5F48332E-DDF2-411F-8F84-8BF241F1B0A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bai1.1", "Bai1.1\Bai1.1.csproj", "{7F379AA8-2607-4CE8-A815-C3C469B027AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bai1.1", "Bai1.1\Bai1.1.csproj", "{7F379AA8-2607-4CE8-A815-C3C469B027AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BaiTapLab2", "BaiTapLab2", "{437534D0-3D61-4726-B0D8-04CCB7C88541}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

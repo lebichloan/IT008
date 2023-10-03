@@ -18,9 +18,3 @@
 |          | 1.2+1.3 | Duy    |
 |   | 1.4+1.5         |    Loan         |
 |    | 1.6    |   Trí          |
-
-
-
-1233455
-
-vsdbzbhsvdbjdczbkf

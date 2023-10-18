@@ -15,11 +15,12 @@ namespace Bai2._5
 {
     public partial class Form1 : Form
     {
+        
         public Form1()
         {
             InitializeComponent();
             InitializeUI();
-            InitializePanelDisk();
+            InitializePanelDisk(); 
         }
         private void InitializeUI() // Show 2 panel để phù hợp với kích thước của form
         {
@@ -51,11 +52,45 @@ namespace Bai2._5
         private void InitializePanelDisk()
         {
             DriveInfo[] drives = DriveInfo.GetDrives();
+
             foreach (DriveInfo drive in drives)
             {
-                TreeNode driveNode = new TreeNode(drive.Name);
-                driveNode.Tag = drive.RootDirectory.FullName;
-                PanelDisk.Nodes.Add(driveNode);
+                if (drive.Name == @"D:\") 
+                {
+                    PopulateDirectories(drive.RootDirectory, PanelDisk.Nodes);
+                    break;
+                }
+            }
+        }
+
+        private void PopulateDirectories(DirectoryInfo directory, TreeNodeCollection nodes)
+        {
+            try
+            {
+                // Tạo một node cho thư mục hiện tại
+                TreeNode dirNode = new TreeNode(directory.Name);
+                dirNode.Tag = directory.FullName;
+
+                // Thêm node thư mục hiện tại vào danh sách các nodes
+                nodes.Add(dirNode);
+
+                // Lấy danh sách các thư mục con
+                DirectoryInfo[] subDirectories = directory.GetDirectories();
+
+                // Gọi đệ quy để tạo cây thư mục con cho mỗi thư mục con
+                foreach (DirectoryInfo subDir in subDirectories)
+                {
+                    PopulateDirectories(subDir, dirNode.Nodes);
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // Xử lý ngoại lệ nếu không có quyền truy cập vào thư mục
+            }
+            catch (Exception ex)
+            {
+                // Xử lý bất kỳ lỗi nào khác
+                Console.WriteLine($"Error: {ex.Message}");
             }
         }
 
@@ -87,10 +122,6 @@ namespace Bai2._5
                 {
                     string selectedPath = e.Node.Tag.ToString();
                     UpdatePanelFile(selectedPath);
-                }
-                else
-                {
-                    // Xử lý trường hợp `Tag` là null (không có đường dẫn).
                 }
             }
             catch (Exception ex)

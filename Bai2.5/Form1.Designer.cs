@@ -28,19 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Window (C:)");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("New Volume (D:)");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("New Volume (E:)");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("New Volume(F:)");
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("My Computer", new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2,
-            treeNode3,
-            treeNode4});
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("User");
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("System");
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Laptop MSI");
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Downloads");
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("iddfsdsf");
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("dfsdsf");
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("sdfdsfdsf");
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("sdfds");
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("");
             this.PanelDisk = new System.Windows.Forms.TreeView();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,20 +71,9 @@
             // 
             // PanelDisk
             // 
+            this.PanelDisk.LineColor = System.Drawing.Color.LightSteelBlue;
             this.PanelDisk.Location = new System.Drawing.Point(0, 69);
             this.PanelDisk.Name = "PanelDisk";
-            treeNode1.Name = "Disk_C";
-            treeNode1.Text = "Window (C:)";
-            treeNode2.Name = "Disk_D";
-            treeNode2.Text = "New Volume (D:)";
-            treeNode3.Name = "Disk_E";
-            treeNode3.Text = "New Volume (E:)";
-            treeNode4.Name = "Disk_F";
-            treeNode4.Text = "New Volume(F:)";
-            treeNode5.Name = "My_Computer";
-            treeNode5.Text = "My Computer";
-            this.PanelDisk.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode5});
             this.PanelDisk.Size = new System.Drawing.Size(263, 369);
             this.PanelDisk.TabIndex = 1;
             this.PanelDisk.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.PanelDisk_AfterSelect);
@@ -346,7 +327,8 @@
             listViewItem1,
             listViewItem2,
             listViewItem3,
-            listViewItem4});
+            listViewItem4,
+            listViewItem5});
             this.PanelFile.Location = new System.Drawing.Point(270, 69);
             this.PanelFile.Name = "PanelFile";
             this.PanelFile.Size = new System.Drawing.Size(531, 369);

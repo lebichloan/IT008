@@ -83,14 +83,22 @@ namespace Bai2._5
         {
             try
             {
-                string selectedPath = e.Node.Tag.ToString();
-                UpdatePanelFile(selectedPath);
+                if (e.Node.Tag != null)
+                {
+                    string selectedPath = e.Node.Tag.ToString();
+                    UpdatePanelFile(selectedPath);
+                }
+                else
+                {
+                    // Xử lý trường hợp `Tag` là null (không có đường dẫn).
+                }
             }
             catch (Exception ex)
             {
                 ShowErrorMessage($"Error: {ex.Message}");
             }
         }
+
 
         private void AddListViewItem(string itemName, string type)
         {

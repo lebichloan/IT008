@@ -57,39 +57,35 @@ namespace Bai2._5
             {
                 if (drive.Name == @"D:\") 
                 {
-                    PopulateDirectories(drive.RootDirectory, PanelDisk.Nodes);
+                    //Load các thư mục, file trong ổ dĩa
+                    LoadFolderOrFile(drive.RootDirectory, PanelDisk.Nodes);
                     break;
                 }
             }
         }
 
-        private void PopulateDirectories(DirectoryInfo directory, TreeNodeCollection nodes)
+        // Hàm đệ quy để load các thưc mục con của các thư mục con
+        private void LoadFolderOrFile(DirectoryInfo directory, TreeNodeCollection nodes)
         {
             try
             {
-                // Tạo một node cho thư mục hiện tại
-                TreeNode dirNode = new TreeNode(directory.Name);
-                dirNode.Tag = directory.FullName;
+                TreeNode NodeInCurrentFolder = new TreeNode(directory.Name);
+                NodeInCurrentFolder.Tag = directory.FullName; 
 
                 // Thêm node thư mục hiện tại vào danh sách các nodes
-                nodes.Add(dirNode);
+                nodes.Add(NodeInCurrentFolder);
 
                 // Lấy danh sách các thư mục con
-                DirectoryInfo[] subDirectories = directory.GetDirectories();
+                DirectoryInfo[] FolderChildren = directory.GetDirectories();
 
                 // Gọi đệ quy để tạo cây thư mục con cho mỗi thư mục con
-                foreach (DirectoryInfo subDir in subDirectories)
+                foreach (DirectoryInfo folder in FolderChildren)
                 {
-                    PopulateDirectories(subDir, dirNode.Nodes);
+                    LoadFolderOrFile(folder, NodeInCurrentFolder.Nodes);
                 }
-            }
-            catch (UnauthorizedAccessException)
-            {
-                // Xử lý ngoại lệ nếu không có quyền truy cập vào thư mục
             }
             catch (Exception ex)
             {
-                // Xử lý bất kỳ lỗi nào khác
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }

@@ -15,7 +15,7 @@ namespace Bai2._5
 {
     public partial class Form1 : Form
     {
-        
+
         public Form1()
         {
             InitializeComponent();
@@ -89,10 +89,17 @@ namespace Bai2._5
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
-
         private string GetCurrentPath()
         {
-            return Directory.GetCurrentDirectory();
+            if (PanelFile.SelectedItems.Count == 0)
+            {
+                return currentPathPanelDisk;
+            }
+            else
+            {
+                string path = currentPathPanelDisk + "\\" + PanelFile.SelectedItems[0].Text;
+                return path;
+            }
         }
 
         private void ShowErrorMessage(string message)
@@ -105,6 +112,7 @@ namespace Bai2._5
             MessageBox.Show(message, "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private string currentPathPanelDisk;
         /// <summary>
         /// Xử lý sự kiện khi chọn một node trong PanelDisk
         /// </summary>
@@ -116,8 +124,8 @@ namespace Bai2._5
             {
                 if (e.Node.Tag != null)
                 {
-                    string selectedPath = e.Node.Tag.ToString();
-                    UpdatePanelFile(selectedPath);
+                    currentPathPanelDisk = e.Node.Tag.ToString();
+                    UpdatePanelFile(currentPathPanelDisk);
                 }
             }
             catch (Exception ex)
@@ -194,18 +202,18 @@ namespace Bai2._5
 
         
         /// <summary>
-        /// Up: đi lên thư mục cha của thư mục đang được xem hiện tại.        
+        /// Up: đi lên thư mục cha của thư mục đang được xem hiện tại (dựa vào node đang chọn trong panel disk) 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void upToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string currentPath = GetCurrentPath(); 
-            
-            string parentPath = Directory.GetParent(currentPath)?.FullName;
+        {            
+            string parentPath = Directory.GetParent(currentPathPanelDisk)?.FullName;
+
             if (parentPath != null)
             {
                 UpdatePanelFile(parentPath);
+                currentPathPanelDisk = parentPath;
             }
             else
             {
@@ -215,14 +223,13 @@ namespace Bai2._5
 
 
         /// <summary>
-        /// Refresh: loại lại thự mục đang xem hiện tại.
+        /// Refresh: load lại thự mục đang xem hiện tại (dựa vào panel disk)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string currentPath = GetCurrentPath();
-            UpdatePanelFile(currentPath);
+            UpdatePanelFile(currentPathPanelDisk);
         }
 
 
@@ -230,17 +237,17 @@ namespace Bai2._5
         private string _cutItemPath;
         private void HandleCopyCutOperation(bool isCopy)
         {
-            if (PanelFile.SelectedItems.Count > 0)
+            if (PanelFile.SelectedItems != null && PanelFile.SelectedItems.Count > 0)
             {
-                _copyItemPath = isCopy ? PanelFile.SelectedItems[0].Tag.ToString() : null;
-                _cutItemPath = isCopy ? null : PanelFile.SelectedItems[0].Tag.ToString();
+                _copyItemPath = isCopy ? GetCurrentPath() : null;
+                _cutItemPath = isCopy ? null : GetCurrentPath();
                 if (!isCopy)
                 {
-                    ShowSuccessMessage("Cắt nội dung thành công");
+                    ShowSuccessMessage($"Cắt nội dung thành công \n {_cutItemPath}");
                 }
                 else
                 {
-                    ShowSuccessMessage("Sao chép nội dung thành công");
+                    ShowSuccessMessage($"Sao chép nội dung thành công \n {_copyItemPath}");
                 }
             }
             else
@@ -257,13 +264,13 @@ namespace Bai2._5
         private void copyToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             HandleCopyCutOperation(true);
-            UpdatePanelFile(GetCurrentPath());
+            UpdatePanelFile(currentPathPanelDisk);
         }
 
         private void cutToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             HandleCopyCutOperation(false);
-            UpdatePanelFile(GetCurrentPath());
+            UpdatePanelFile(currentPathPanelDisk);
         }
 
         private void DirectoryCopy(string sourceDir, string destDir, bool copySubDirs)
@@ -271,31 +278,50 @@ namespace Bai2._5
             DirectoryInfo dir = new DirectoryInfo(sourceDir);
             DirectoryInfo[] dirs = dir.GetDirectories();
 
-            if (!dir.Exists)
+            Directory.CreateDirectory(destDir);
+
+            // Get the files in the source directory and copy to the destination directory
+            foreach (FileInfo file in dir.GetFiles())
             {
-                throw new DirectoryNotFoundException($"Source directory does not exist or could not be found: {sourceDir}");
+                string targetFilePath = Path.Combine(destDir, file.Name);
+                file.CopyTo(targetFilePath);
             }
 
-            if (!Directory.Exists(destDir))
-            {
-                Directory.CreateDirectory(destDir);
-            }
-
-            FileInfo[] files = dir.GetFiles();
-            foreach (FileInfo file in files)
-            {
-                string tempPath = Path.Combine(destDir, file.Name);
-                file.CopyTo(tempPath, false);
-            }
-
+            // If recursive and copying subdirectories, recursively call this method
             if (copySubDirs)
             {
-                foreach (DirectoryInfo subdir in dirs)
+                foreach (DirectoryInfo subDir in dirs)
                 {
-                    string tempPath = Path.Combine(destDir, subdir.Name);
-                    DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
+                    string newDestinationDir = Path.Combine(destDir, subDir.Name);
+                    DirectoryCopy(subDir.FullName, newDestinationDir, true);
                 }
             }
+
+            //if (!dir.Exists)
+            //{
+            //    throw new DirectoryNotFoundException($"Source directory does not exist or could not be found: {sourceDir}");
+            //}
+
+            //if (!Directory.Exists(destDir))
+            //{
+            //    Directory.CreateDirectory(destDir);
+            //}
+
+            //FileInfo[] files = dir.GetFiles();
+            //foreach (FileInfo file in files)
+            //{
+            //    string tempPath = Path.Combine(destDir, file.Name);
+            //    file.CopyTo(tempPath, false);
+            //}
+
+            //if (copySubDirs)
+            //{
+            //    foreach (DirectoryInfo subdir in dirs)
+            //    {
+            //        string tempPath = Path.Combine(destDir, subdir.Name);
+            //        DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
+            //    }
+            //}
         }
 
         private void pasteToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -349,31 +375,40 @@ namespace Bai2._5
             {
                 ShowErrorMessage("Vui lòng chọn nội dung trước khi dán");
             }
-            UpdatePanelFile(GetCurrentPath());
+            UpdatePanelFile(currentPathPanelDisk);
         }
 
         private void deleteToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            string currentItem = GetCurrentPath();
-
-            DialogResult result = MessageBox.Show("Bạn chắc chắn muốn xóa nội dung đã chọn?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            
-            if (result == DialogResult.Yes)
+            if (PanelFile.SelectedItems.Count == 0 && PanelFile.SelectedItems != null)
             {
-                if (File.Exists(currentItem))
+                ShowErrorMessage("Vui lòng chọn nội dung cần xóa");
+            }
+            else
+            {
+                string currentItem = GetCurrentPath();
+
+                DialogResult result = MessageBox.Show($"Bạn chắc chắn muốn xóa nội dung đã chọn? \n {currentItem}", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
                 {
-                    File.Delete(currentItem);
-                    MessageBox.Show("Xóa file đã chọn thành công", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (File.Exists(currentItem))
+                    {
+                        File.Delete(currentItem);
+                        MessageBox.Show("Xóa file đã chọn thành công", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else if (Directory.Exists(currentItem))
+                    {
+                        Directory.Delete(currentItem, true);
+                        MessageBox.Show("Xóa thư mục đã chọn thành công", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Có lỗi xảy ra", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
-                else if (Directory.Exists(currentItem))
-                {
-                    Directory.Delete(currentItem, true);
-                    MessageBox.Show("Xóa thư mục đã chọn thành công", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Có lỗi xảy ra", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+
+                UpdatePanelFile(currentPathPanelDisk);
             }
         }
 

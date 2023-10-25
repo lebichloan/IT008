@@ -448,5 +448,86 @@ namespace Bai2._5
             PanelFile.View = View.Details;
         }
 
+        private void renameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (PanelFile.SelectedItems.Count == 0 && PanelFile.SelectedItems != null)
+            {
+                ShowErrorMessage("Vui lòng chọn tập tin hoặc thư mục cần đổi tên!");
+            }
+            else
+            {
+                string selectedItem_path = GetCurrentPath();
+                string currentPath = GetCurrentPath();
+
+                Rename_Input_Form renameForm = new Rename_Input_Form();
+                renameForm.ShowDialog();
+                string newName = renameForm.textBox1.Text;
+
+                for (int i = selectedItem_path.Length - 1; i >= 0; i--)
+                {
+                    if (selectedItem_path[i] != '\\')
+                    {
+                        selectedItem_path = selectedItem_path.Remove(i);
+                    }
+                    else
+                        break;
+                }
+
+                string newPath = selectedItem_path + newName;
+
+                if (File.Exists(currentPath))
+                {
+                    File.Move(currentPath, newPath);
+                    MessageBox.Show("Đổi tên file đã chọn thành công", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else if (Directory.Exists(currentPath))
+                {
+                    new DirectoryInfo(currentPath).MoveTo(newPath);
+                    MessageBox.Show("Đổi tên thư mục đã chọn thành công", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Có lỗi xảy ra", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                UpdatePanelFile(currentPathPanelDisk);
+            }
+
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (PanelFile.SelectedItems.Count == 0 && PanelFile.SelectedItems != null)
+            {
+                ShowErrorMessage("Vui lòng chọn nội dung cần xóa");
+            }
+            else
+            {
+                string currentItem = GetCurrentPath();
+
+                DialogResult result = MessageBox.Show($"Bạn chắc chắn muốn xóa nội dung đã chọn? \n {currentItem}", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    if (File.Exists(currentItem))
+                    {
+                        File.Delete(currentItem);
+                        MessageBox.Show("Xóa file đã chọn thành công", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else if (Directory.Exists(currentItem))
+                    {
+                        Directory.Delete(currentItem, true);
+                        MessageBox.Show("Xóa thư mục đã chọn thành công", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Có lỗi xảy ra", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+
+                UpdatePanelFile(currentPathPanelDisk);
+            }
+
+        }
     }
 }

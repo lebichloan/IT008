@@ -171,6 +171,71 @@ namespace Bai2._5
         }
 
 
+        // Câu B
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HandleCopyCutOperation(true);
+            UpdatePanelFile(currentPathPanelDisk);
+        }
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HandleCopyCutOperation(false);
+            UpdatePanelFile(currentPathPanelDisk);
+        }
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(_copyItemPath) && (Directory.Exists(_copyItemPath) || File.Exists(_copyItemPath)))
+            {
+                string destinationFolder = GetCurrentPath();
+                string destinationPath = Path.Combine(destinationFolder, Path.GetFileName(_copyItemPath));
+
+                try
+                {
+                    if (Directory.Exists(_copyItemPath))
+                    {
+                        DirectoryCopy(_copyItemPath, destinationPath, true);
+                        ShowSuccessMessage("Dán thư mục thành công");
+                    }
+                    else if (File.Exists(_copyItemPath))
+                    {
+                        File.Copy(_copyItemPath, destinationPath);
+                        ShowSuccessMessage("Dán file thành công");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ShowErrorMessage($"Lỗi sao chép: {ex.Message}");
+                }
+            }
+            else if (!string.IsNullOrEmpty(_cutItemPath) && (Directory.Exists(_cutItemPath) || File.Exists(_cutItemPath)))
+            {
+                string destinationFolder = GetCurrentPath();
+
+                try
+                {
+                    if (Directory.Exists(_cutItemPath))
+                    {
+                        Directory.Move(_cutItemPath, Path.Combine(destinationFolder, Path.GetFileName(_cutItemPath)));
+                        ShowSuccessMessage("Dán thư mục thành công");
+                    }
+                    else if (File.Exists(_cutItemPath))
+                    {
+                        File.Move(_cutItemPath, Path.Combine(destinationFolder, Path.GetFileName(_cutItemPath)));
+                        ShowSuccessMessage("Dán file thành công");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ShowErrorMessage($"Lỗi cắt: {ex.Message}");
+                }
+            }
+            else
+            {
+                ShowErrorMessage("Vui lòng chọn nội dung trước khi dán");
+            }
+            UpdatePanelFile(currentPathPanelDisk);
+        }
+
         // Câu C
         private void largeIconsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -529,5 +594,7 @@ namespace Bai2._5
             }
 
         }
+
+        
     }
 }

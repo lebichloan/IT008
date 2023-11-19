@@ -13,6 +13,47 @@
             <Setter Property="Margin" Value="63 30 0 15"/>
         </Style>
 
+        <Style x:Key="menuRadioButton" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#cfcfcf"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Margin" Value="30 3 0 3"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Tag" Value="Collapsed"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="25">
+                            <ContentPresenter HorizontalAlignment="Stretch" 
+                                      VerticalAlignment="Center"
+                                      Margin="35 0 0 0"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#02be68"/>
+                    <Setter Property="Foreground" Value="#ffffff"/>
+                    <Setter Property="Tag" Value="Visible"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Opacity" Value="0.5"/>
+                    <Setter Property="Background" Value="#02be68"/>
+                    <Setter Property="Foreground" Value="#ffffff"/>
+                    <Setter Property="Tag" Value="Visible"/>
+                </Trigger>
+                <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}" Value="True">
+                    <Setter Property="Background" Value="#02be68"/>
+                    <Setter Property="Foreground" Value="#ffffff"/>
+                    <Setter Property="Tag" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
         <Style x:Key="menuButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#cfcfcf"/>

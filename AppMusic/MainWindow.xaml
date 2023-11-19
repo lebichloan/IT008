@@ -11,13 +11,13 @@
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
         WindowStyle="None"
-        Height="735" Width="1100">
+        Height="735" Width="1200">
     <Border CornerRadius="0" Background="White" MouseDown="Border_MouseDown">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="220"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.4*"/>
+                <ColumnDefinition Width="440"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -26,20 +26,20 @@
                 <RowDefinition Height="90"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Background="White" Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Right">
+            <StackPanel Grid.Row="0" Grid.ColumnSpan="3"  Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Right">
                 <Button Style="{StaticResource windowButton}" Click="ButtonMinimize_Click">
                     <Icon:PackIconMaterial Kind="WindowMinimize"/>
                 </Button>
                 <Button Style="{StaticResource windowButton}" Click="ButtonRestore_Click">
                     <Icon:PackIconMaterial Kind="CheckboxBlankOutline"/>
                 </Button>
-                <Button Style="{StaticResource closeWindowButton}" Click="ButtonClose_Click">
+                <Button Style="{StaticResource closeWindowButton}" Click="ButtonClose_Click" >
                     <Icon:PackIconMaterial Kind="Close"></Icon:PackIconMaterial>
                 </Button>
             </StackPanel>
             
             <!--Menu-->
-            <Border Grid.Row="1" Background="White" CornerRadius="40 0 0 40" Grid.RowSpan="2">
+            <Border Grid.Row="1" Background="White" CornerRadius="20" Margin="10">
                 <StackPanel Margin="0 5 0 0">
                     <!--Ellipses-->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="63 10 0 10">
@@ -50,104 +50,127 @@
 
                     <TextBlock Text="LIBRARY" Style="{StaticResource menuTitle}"/>
                     
-                    <Button Style="{StaticResource menuButton}">
+                    <RadioButton Style="{StaticResource menuRadioButton}" GroupName="menuOption" IsChecked="True">
                         <Grid>
                             <TextBlock Text="Home" Margin="0 0 0 2"/>
                             <Icon:PackIconMaterial Style="{StaticResource menuButtonIcon}"/>
                         </Grid>
-                    </Button>
+                    </RadioButton>
 
-                    <Button Style="{StaticResource menuButton}">
+                    <RadioButton Style="{StaticResource menuRadioButton}" GroupName="menuOption">
                         <Grid>
                             <TextBlock Text="Playlists" Margin="0 0 0 2"/>
                             <Icon:PackIconMaterial Style="{StaticResource menuButtonIcon}"/>
                         </Grid>
-                    </Button>
+                    </RadioButton>
 
-                    <Button Style="{StaticResource menuButton}">
+                    <RadioButton Style="{StaticResource menuRadioButton}" GroupName="menuOption">
                         <Grid>
                             <TextBlock Text="Artists" Margin="0 0 0 2"/>
                             <Icon:PackIconMaterial Style="{StaticResource menuButtonIcon}"/>
                         </Grid>
-                    </Button>
+                    </RadioButton>
 
-                    <Button Style="{StaticResource menuButton}">
+                    <RadioButton Style="{StaticResource menuRadioButton}" GroupName="menuOption">
                         <Grid>
                             <TextBlock Text="Albums" Margin="0 0 0 2"/>
                             <Icon:PackIconMaterial Style="{StaticResource menuButtonIcon}"/>
                         </Grid>
-                    </Button>
-                    
-                    <Button Style="{StaticResource menuButton}">
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource menuRadioButton}" GroupName="menuOption">
                         <Grid>
                             <TextBlock Text="Songs" Margin="0 0 0 2"/>
                             <Icon:PackIconMaterial Style="{StaticResource menuButtonIcon}"/>
                         </Grid>
-                    </Button>
+                    </RadioButton>
 
                     <TextBlock Text="DISCOVER" Style="{StaticResource menuTitle}"/>
 
-                    <Button Style="{StaticResource menuButton}">
+                    <RadioButton Style="{StaticResource menuRadioButton}" GroupName="menuOption">
                         <Grid>
                             <TextBlock Text="Radio" Margin="0 0 0 2"/>
                             <Icon:PackIconMaterial Style="{StaticResource menuButtonIcon}"/>
                         </Grid>
-                    </Button>
+                    </RadioButton>
 
-                    <Button Style="{StaticResource menuButton}">
+                    <RadioButton Style="{StaticResource menuRadioButton}" GroupName="menuOption">
                         <Grid>
                             <TextBlock Text="For you" Margin="0 0 0 2"/>
                             <Icon:PackIconMaterial Style="{StaticResource menuButtonIcon}"/>
                         </Grid>
-                    </Button>
+                    </RadioButton>
+
                 </StackPanel>
             </Border>
             
             <!--Music Section-->
-            <StackPanel Grid.Column="1" Grid.Row="1" Background="White" Margin="40 60 10 0">
-                <TextBlock Text="Home" Style="{StaticResource titleText}"/>
+            <Grid Grid.Column="1" Grid.Row="1" Background="White" Margin="40 60 10 40" MaxWidth="550">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="45"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Home" Style="{StaticResource titleText}"/>
 
-                <Border CornerRadius="20" Margin="0 20 0 0">
-                    <Border.Background>
-                        <LinearGradientBrush>
-                            <GradientStop Color="#30ad9a" Offset="0"/>
-                            <GradientStop Color="#18c274" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Border.Background>
+                    <Border Grid.Row="1" CornerRadius="20" Margin="0 20 0 0" >
+                        <Border.Background>
+                            <LinearGradientBrush>
+                                <GradientStop Color="#30ad9a" Offset="0"/>
+                                <GradientStop Color="#18c274" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
 
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.4" Color="#1fae7e"/>
-                    </Border.Effect>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.4" Color="#1fae7e"/>
+                        </Border.Effect>
 
-                    <Grid>
-                        
-                        <Border Opacity="0.3" CornerRadius="20">
-                            <Border.Background>
-                                <ImageBrush ImageSource="/Images/Artist/Double2T.png"/>
-                            </Border.Background>
-                        </Border>
-                        
-                        <!--Music list-->
-                        <StackPanel Margin="30">
-                            <TextBlock Text="Daily Singer" Foreground="White"
-                                       FontSize="26" FontWeight="Bold"/>
-                            <TextBlock Text="Double2T" Foreground="#c0e6de"
-                                       FontSize="18" FontWeight="SemiBold"/>
-
-                            <uc:SongItem Number="1" Title="À Lôi" Time="3:56"/>
-                            <uc:SongItem Number="2" Title="Thanh Âm Miền Núi" Time="4:02"/>
-                            <uc:SongItem Number="3" Title="Bad Girl" Time="3:29"/>
-                            <uc:SongItem Number="4" Title="Người Miền Núi Chất" Time="4:32"/>
-                            <uc:SongItem Number="5" Title="Chài Diếp Noọng" Time="5:11"/>
-                            <uc:SongItem Number="6" Title="Tay-Lai PrO" Time="3:47"/>
-                            <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-            </StackPanel>
+                        <Grid >
+                            <Border Opacity="0.3" CornerRadius="20">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="/Images/Artist/Double2T.png"/>
+                                </Border.Background>
+                            </Border>
+                            <Grid Margin="20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="60"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0">
+                                    <TextBlock Text="Daily Singer" Foreground="White"
+                                                FontSize="26" FontWeight="Bold"/>
+                                    <TextBlock Text="Double2T" Foreground="#c0e6de"
+                                                FontSize="18" FontWeight="SemiBold" Margin="0 0 0 15"/>
+                                </StackPanel>
+                                <Grid Grid.Row="1">
+                                    <ScrollViewer Margin="5" VerticalScrollBarVisibility="Hidden" >
+                                        <!--Music list-->
+                                        <StackPanel>
+                                            <uc:SongItem Number="1" Title="À Lôi" Time="3:56"/>
+                                            <uc:SongItem Number="2" Title="Thanh Âm Miền Núi" Time="4:02"/>
+                                            <uc:SongItem Number="3" Title="Bad Girl" Time="3:29"/>
+                                            <uc:SongItem Number="4" Title="Người Miền Núi Chất" Time="4:32"/>
+                                            <uc:SongItem Number="5" Title="Chài Diếp Noọng" Time="5:11"/>
+                                            <uc:SongItem Number="6" Title="Tay-Lai PrO" Time="3:47"/>
+                                            <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                            <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                            <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                            <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                            <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                            <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                            <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                            
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Border>
+            </Grid>
+            
 
             <!--Right section-->
             <Border Grid.Column="2" Grid.Row="1" CornerRadius="0 0 0 0" Background="White" Margin="0 22 0 0">
+                
                 <StackPanel Margin="30 50 30 0">
                     <!--Popular-->
                     <TextBlock Text="Popular" Style="{StaticResource titleText}" Margin="0 0 0 10" FontSize="28"/>

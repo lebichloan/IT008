@@ -1,0 +1,98 @@
+﻿<Page x:Class="AppMusic.Pages.Home"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AppMusic.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="610" d:DesignWidth="980"
+      Background="Transparent"
+      xmlns:uc="clr-namespace:AppMusic.UserControls"
+      xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+      Title="Home">
+    <Border Background="White" CornerRadius="20">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="450"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" Margin="40 40 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="45"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Home" Style="{StaticResource titleText}"></TextBlock>
+                <Border Grid.Row="1" CornerRadius="20" Margin="0 20 10 20" >
+                    <Border.Background>
+                        <LinearGradientBrush>
+                            <GradientStop Color="#30ad9a" Offset="0"/>
+                            <GradientStop Color="#18c274" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="20" Opacity="0.4" ShadowDepth="0" Color="#1fae7e"/>
+                    </Border.Effect>
+                    <Grid>
+                        <Border Opacity="0.3" CornerRadius="20">
+                            <Border.Background>
+                                <ImageBrush ImageSource="/Images/Artist/Double2T.png"/>
+                            </Border.Background>
+                        </Border>
+                        <Grid Margin="20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="70"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" VerticalAlignment="Center">
+                                <TextBlock Text="Daily Singer" Foreground="White"
+                                                FontSize="26" FontWeight="Bold"/>
+                                <TextBlock Text="Double2T" Foreground="#c0e6de"
+                                                FontSize="18" FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <Grid Grid.Row="1">
+                                <ScrollViewer Margin="5" VerticalScrollBarVisibility="Hidden" >
+                                    <!--Music list-->
+                                    <StackPanel>
+                                        <uc:SongItem Number="1" Title="À Lôi" Time="3:56"/>
+                                        <uc:SongItem Number="2" Title="Thanh Âm Miền Núi" Time="4:02"/>
+                                        <uc:SongItem Number="3" Title="Bad Girl" Time="3:29"/>
+                                        <uc:SongItem Number="4" Title="Người Miền Núi Chất" Time="4:32"/>
+                                        <uc:SongItem Number="5" Title="Chài Diếp Noọng" Time="5:11"/>
+                                        <uc:SongItem Number="6" Title="Tay-Lai PrO" Time="3:47"/>
+                                        <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                        <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                        <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                        <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                        <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                        <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                        <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+            <!--Right section-->
+            <Border Grid.Column="2" Grid.Row="1" CornerRadius="0 0 0 0" Background="White" Margin="0 22 10 0">
+
+                <StackPanel Margin="30 27 30 0">
+                    <!--Popular-->
+                    <TextBlock Text="Popular" Style="{StaticResource titleText}" Margin="0 0 0 10" FontSize="28"/>
+                    <uc:PopularSong Title="À Lôi" Time="3:56" Image="/Images/Song/ALoi.jpg" IsActive="True"/>
+                    <uc:PopularSong Title="We Don't Talk Anymore" Time="4:05" Image="/Images/Song/WDTA.jpg"/>
+                    <uc:PopularSong Title="Chúng Ta Của Hiện Tại" Time="6:18" Image="/Images/Artist/SonTungMTP.jpg"/>
+                    <uc:PopularSong Title="Chài Điếp Noọng" Time="5:11" Image="/Images/Song/ChaiDiepNoong.jpg"/>
+
+                    <!--Playlists-->
+                    <TextBlock Text="Playlists" Style="{StaticResource titleText}" Margin="0 30 0 20" FontSize="24"/>
+                    <StackPanel Orientation="Horizontal">
+                        <uc:Playlists Width="200" Title="Best of" Desc="CharliePuth" Image="/Images/Artist/CharliePuth.jpg"/>
+                        <uc:Playlists Width="200" Title="Rap Việt" Desc="Double2T" Image="/Images/Artist/Double2T.png" Margin="10 0 0 0"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Page>

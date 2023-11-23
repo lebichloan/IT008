@@ -23,6 +23,7 @@ namespace AppMusic
         public MainWindow()
         {
             InitializeComponent();
+            fContainerPage.Navigate(new System.Uri("Pages/Home.xaml", UriKind.RelativeOrAbsolute));
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
@@ -49,6 +50,11 @@ namespace AppMusic
         private void ButtonMinimize_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
+        }
+
+        private void btnHome_Click(object sender, RoutedEventArgs e)
+        {
+            fContainerPage.Navigate(new System.Uri("Pages/Home.xaml", UriKind.RelativeOrAbsolute));
         }
     }
 }

@@ -156,9 +156,26 @@
                                         <Icon:PackIconMaterial Kind="SkipPrevious" Style="{StaticResource playerButtonIcon}"/>
                                     </Button>
 
-                                    <Button Style="{StaticResource playerButton}">
-                                        <Icon:PackIconMaterial Kind="Pause" Style="{StaticResource playerButtonIcon}"/>
-                                    </Button>
+                                    <ToggleButton x:Name="PausePlayMusic" Click="PausePlayMusic_Click">
+                                        <ToggleButton.Style>
+                                            <Style TargetType="ToggleButton" BasedOn="{StaticResource playerButtonPlay}">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <Icon:PackIconMaterial Kind="Play" Style="{StaticResource playerButtonIcon}"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}" Value="False">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Icon:PackIconMaterial Kind="Pause" Style="{StaticResource playerButtonIcon}"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                    </ToggleButton>
 
                                     <Button Style="{StaticResource playerButton}">
                                         <Icon:PackIconMaterial Kind="SkipNext" Style="{StaticResource playerButtonIcon}"/>
@@ -171,6 +188,9 @@
                                 <Slider HorizontalAlignment="Center" Margin="5 0 0 5"
                                         Style="{DynamicResource SliderMusic}" x:Name="sliderPlayer"
                                         Width="300" VerticalAlignment="Center"
+                                        Value="0" Minimum="0" Maximum="100"
+                                        ValueChanged="sliderPlayer_ValueChanged"
+                                        PreviewMouseDown="sliderPlayer_PreviewMouseDown"
                                         SelectionEnd="{Binding ElementName=sliderPlayer,Path=Value}">
                                 </Slider>
                                 <TextBlock Text="3:51" FontSize="14" FontWeight="SemiBold" Foreground="#ffffff"/>
@@ -186,8 +206,10 @@
                         <Slider Style="{DynamicResource SliderVolume}" x:Name="slider" IsSelectionRangeEnabled="True" 
                                 HorizontalAlignment="Right"
                                 Margin="0 0 20 0"
-                                VerticalAlignment="Center" Value="5" Width="125"
-                                SelectionEnd="{Binding ElementName=slider,Path=Value}"/>
+                                VerticalAlignment="Center" Maximum="100" Minimum="0" Value="100" Width="125"
+                                SelectionEnd="{Binding ElementName=slider,Path=Value}"
+                                ValueChanged="slider_ValueChanged"
+                                PreviewMouseDown="slider_PreviewMouseDown"/>
                     </StackPanel>
                 </Grid>
             </Border>

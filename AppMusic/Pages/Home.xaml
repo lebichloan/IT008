@@ -53,7 +53,7 @@
                                 <ScrollViewer Margin="5" VerticalScrollBarVisibility="Hidden" >
                                     <!--Music list-->
                                     <StackPanel>
-                                        <uc:SongItem Number="1" Title="À Lôi" Time="3:56"/>
+                                        <uc:SongItem Number="1" Title="À Lôi" Time="3:56" MouseLeftButtonDown="SongItem_MouseLeftButtonDown"/>
                                         <uc:SongItem Number="2" Title="Thanh Âm Miền Núi" Time="4:02"/>
                                         <uc:SongItem Number="3" Title="Bad Girl" Time="3:29"/>
                                         <uc:SongItem Number="4" Title="Người Miền Núi Chất" Time="4:32"/>

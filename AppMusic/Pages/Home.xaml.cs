@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AppMusic;
 
 namespace AppMusic.Pages
 {
@@ -23,6 +24,11 @@ namespace AppMusic.Pages
         public Home()
         {
             InitializeComponent();
+        }
+        private void SongItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MediaPlayerManager.filePath = @"C:\Users\Laptop MSI\Downloads\ALoi.mp3";
+            MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
         }
     }
 }

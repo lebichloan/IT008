@@ -23,6 +23,7 @@ namespace AppMusic
     
     public partial class MainWindow : Window
     {
+        private bool isSliderDragged = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -62,7 +63,8 @@ namespace AppMusic
         {
             fContainerPage.Navigate(new System.Uri("Pages/Home.xaml", UriKind.RelativeOrAbsolute));
         }
-
+        
+    // Dừng và phát nhạc
         private void PausePlayMusic_Click(object sender, RoutedEventArgs e)
         {
             if(MediaPlayerManager.MediaPlayer != null && PausePlayMusic.IsChecked == true && MediaPlayerManager.filePath != string.Empty)
@@ -82,7 +84,16 @@ namespace AppMusic
                 SetupTimer();
             }
         }
+    // Sự kiện xảy ra khi IsPlaying thay đổi giá trị
+        private void MediaPlayerManager_IsPlayingChanged(object sender, EventArgs e)
+        {
+            // Khi IsPlaying thay đổi, cập nhật trạng thái của ToggleButton
+            PausePlayMusic.IsChecked = !MediaPlayerManager.IsPlaying;
+            // Đồng thời gọi hàm này để slider chạy theo thời gian bài nhạc
+            SetupTimer();
+        }
 
+    // Volume
         private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             MediaPlayerManager.MediaPlayer.Volume = slider.Value/100;
@@ -102,31 +113,41 @@ namespace AppMusic
                 slider.Value = value;
             }
         }
-        private void MediaPlayerManager_IsPlayingChanged(object sender, EventArgs e)
-        {
-            // Khi IsPlaying thay đổi, cập nhật trạng thái của ToggleButton
-            PausePlayMusic.IsChecked = !MediaPlayerManager.IsPlaying;
-            SetupTimer();
-        }
-
+    // Hết Volume
+    
+    // Thời gian bài nhạc
         private void sliderPlayer_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             // Xử lý khi giá trị của Slider thay đổi
-            double newPosition = sliderPlayer.Value; // Giả sử giá trị được tính theo phần trăm của bài hát
-            UpdateMusicPosition(newPosition);
+            if (MediaPlayerManager.filePath == string.Empty)
+            {
+                MediaPlayerManager.filePath = @"C:\Users\Laptop MSI\Downloads\ALoi.mp3";
+                MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                SetupTimer();
+            }
+            if (!isSliderDragged)
+            {
+                double newPosition = sliderPlayer.Value;
+                UpdateMusicPosition(newPosition);
+            }
         }
         private void UpdateMusicPosition(double newPosition)
         {
-            // Tính toán và đặt vị trí của bài hát dựa trên giá trị mới của Slider
-            double totalDuration = MediaPlayerManager.MediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
-            double newTimeInSeconds = (newPosition / 100) * totalDuration;
+            try
+            {
+                // Tính toán và đặt vị trí của bài hát dựa trên giá trị mới của Slider
+                double totalDuration = MediaPlayerManager.MediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
+                double newTimeInSeconds = (newPosition / 100) * totalDuration;
 
-            // Đặt vị trí của bài hát tại thời điểm mới
-            MediaPlayerManager.MediaPlayer.Position = TimeSpan.FromSeconds(newTimeInSeconds);
+                // Đặt vị trí của bài hát tại thời điểm mới
+                MediaPlayerManager.MediaPlayer.Position = TimeSpan.FromSeconds(newTimeInSeconds);
+            }
+            catch { }
+            
         }
         private DispatcherTimer timer;
 
-        // Gọi hàm này trong constructor của MainWindow
+        // Gọi hàm này khi bắt đầu phát nhạc
         private void SetupTimer()
         {
             timer = new DispatcherTimer();
@@ -137,11 +158,18 @@ namespace AppMusic
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            double currentMusicPosition = MediaPlayerManager.MediaPlayer.Position.TotalSeconds;
-            double totalDuration = MediaPlayerManager.MediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
+            
+            if (!isSliderDragged) // Chỉ cập nhật khi slider không được kéo
+            {
+                double currentMusicPosition = MediaPlayerManager.MediaPlayer.Position.TotalSeconds;
+                double totalDuration = MediaPlayerManager.MediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
 
-            double newPosition = (currentMusicPosition / totalDuration) * 100;
-            sliderPlayer.Value = newPosition;
+                if (totalDuration > 0)
+                {
+                    double newPosition = (currentMusicPosition / totalDuration) * 100;
+                    sliderPlayer.Value = newPosition;
+                }
+            }
         }
 
         private void sliderPlayer_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -158,5 +186,21 @@ namespace AppMusic
                 sliderPlayer.Value = value;
             }
         }
+        private void sliderPlayer_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            isSliderDragged = true;
+        }
+
+        private void sliderPlayer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (isSliderDragged)
+            {
+                double newPosition = sliderPlayer.Value;
+                UpdateMusicPosition(newPosition);
+                isSliderDragged = false;
+            }
+        }
+
+        // Hết thời gian bài nhạc
     }
 }

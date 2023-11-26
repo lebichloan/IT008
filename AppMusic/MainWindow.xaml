@@ -191,6 +191,8 @@
                                         Value="0" Minimum="0" Maximum="100"
                                         ValueChanged="sliderPlayer_ValueChanged"
                                         PreviewMouseDown="sliderPlayer_PreviewMouseDown"
+                                        PreviewMouseLeftButtonDown="sliderPlayer_PreviewMouseLeftButtonDown"
+                                        PreviewMouseLeftButtonUp="sliderPlayer_PreviewMouseLeftButtonUp"
                                         SelectionEnd="{Binding ElementName=sliderPlayer,Path=Value}">
                                 </Slider>
                                 <TextBlock Text="3:51" FontSize="14" FontWeight="SemiBold" Foreground="#ffffff"/>

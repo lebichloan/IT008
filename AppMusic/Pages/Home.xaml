@@ -60,12 +60,6 @@
                                         <uc:SongItem Number="5" Title="Chài Diếp Noọng" Time="5:11"/>
                                         <uc:SongItem Number="6" Title="Tay-Lai PrO" Time="3:47"/>
                                         <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
-                                        <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
-                                        <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
-                                        <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
-                                        <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
-                                        <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
-                                        <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
                                     </StackPanel>
                                 </ScrollViewer>
                             </Grid>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,16 +22,25 @@ namespace AppMusic
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window,INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        public static MediaPlayerManager MediaPlayerManager { get; private set; }
         private bool isSliderDragged = false;
+        private double volumePre;
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = this;
-            PausePlayMusic.IsChecked = true;
+            this.DataContext = this;
             fContainerPage.Navigate(new System.Uri("Pages/Home.xaml", UriKind.RelativeOrAbsolute));
             MediaPlayerManager.IsPlayingChanged += MediaPlayerManager_IsPlayingChanged;
+            volumePre = 0;
+            MediaPlayerManager = new MediaPlayerManager();
+            PausePlayMusic.DataContext = MediaPlayerManager;
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
@@ -67,12 +77,12 @@ namespace AppMusic
     // Dừng và phát nhạc
         private void PausePlayMusic_Click(object sender, RoutedEventArgs e)
         {
-            if(MediaPlayerManager.MediaPlayer != null && PausePlayMusic.IsChecked == true && MediaPlayerManager.filePath != string.Empty)
+            if(MediaPlayerManager.MediaPlayer != null && MediaPlayerManager.IsPlaying && MediaPlayerManager.filePath != string.Empty)
             {
                 MediaPlayerManager.MediaPlayer.Pause();
                 MediaPlayerManager.IsPlaying = false;
             }
-            else if(MediaPlayerManager.MediaPlayer != null && PausePlayMusic.IsChecked == false && MediaPlayerManager.filePath != string.Empty)
+            else if(MediaPlayerManager.MediaPlayer != null && !MediaPlayerManager.IsPlaying && MediaPlayerManager.filePath != string.Empty)
             {
                 MediaPlayerManager.MediaPlayer.Play();
                 MediaPlayerManager.IsPlaying = true;
@@ -84,16 +94,15 @@ namespace AppMusic
                 SetupTimer();
             }
         }
-    // Sự kiện xảy ra khi IsPlaying thay đổi giá trị
+        // Sự kiện xảy ra khi IsPlaying thay đổi giá trị
         private void MediaPlayerManager_IsPlayingChanged(object sender, EventArgs e)
         {
-            // Khi IsPlaying thay đổi, cập nhật trạng thái của ToggleButton
-            PausePlayMusic.IsChecked = !MediaPlayerManager.IsPlaying;
+
             // Đồng thời gọi hàm này để slider chạy theo thời gian bài nhạc
             SetupTimer();
         }
 
-    // Volume
+        // Volume
         private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             MediaPlayerManager.MediaPlayer.Volume = slider.Value/100;
@@ -202,5 +211,21 @@ namespace AppMusic
         }
 
         // Hết thời gian bài nhạc
+        private void volumeButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            if(MediaPlayerManager.MediaPlayer.Volume != 0)
+            {
+                volumePre = MediaPlayerManager.MediaPlayer.Volume;
+                MediaPlayerManager.MediaPlayer.Volume = 0;
+                slider.Value = 0;
+            }
+            else
+            {
+                MediaPlayerManager.MediaPlayer.Volume = volumePre;
+                slider.Value = volumePre*slider.Maximum;
+            }
+        }
+
     }
 }

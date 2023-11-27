@@ -20,20 +20,20 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="35"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="90"/>
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Grid.ColumnSpan="3"  Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Right">
                 <Button Style="{StaticResource windowButton}" Click="ButtonMinimize_Click">
-                    <Icon:PackIconMaterial Kind="WindowMinimize"/>
+                    <Icon:PackIconMaterial Kind="WindowMinimize" Height="13" Width="13"/>
                 </Button>
                 <Button Style="{StaticResource windowButton}" Click="ButtonRestore_Click">
-                    <Icon:PackIconMaterial Kind="CheckboxBlankOutline"/>
+                    <Icon:PackIconMaterial Kind="CheckboxBlankOutline" Height="13" Width="13"/>
                 </Button>
                 <Button Style="{StaticResource closeWindowButton}" Click="ButtonClose_Click" >
-                    <Icon:PackIconMaterial Kind="Close"></Icon:PackIconMaterial>
+                    <Icon:PackIconMaterial Kind="Close" Height="13" Width="13"/>
                 </Button>
             </StackPanel>
             
@@ -165,7 +165,7 @@
                                                     </Setter.Value>
                                                 </Setter>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}" Value="False">
+                                                    <DataTrigger Binding="{Binding IsPlaying}" Value="True">
                                                         <Setter Property="Content">
                                                             <Setter.Value>
                                                                 <Icon:PackIconMaterial Kind="Pause" Style="{StaticResource playerButtonIcon}"/>
@@ -201,8 +201,26 @@
                     </Grid>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="2" FlowDirection="LeftToRight" HorizontalAlignment="Right">
-                        <Button Style="{StaticResource playerButton}" HorizontalAlignment="Right">
-                            <Icon:PackIconMaterial Kind="VolumeMedium" Style="{StaticResource playerButtonIcon}"/>
+                        <Button x:Name="volumeButton" HorizontalAlignment="Right"
+                                Click="volumeButton_Click">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource playerButton}">
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <Icon:PackIconMaterial Kind="VolumeMedium" Style="{StaticResource playerButtonIcon}"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=Value, ElementName=slider}" Value="0">
+                                            <Setter Property="Content">
+                                                <Setter.Value>
+                                                    <Icon:PackIconMaterial Kind="VolumeMute" Style="{StaticResource playerButtonIcon}"/>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
                         </Button>
 
                         <Slider Style="{DynamicResource SliderVolume}" x:Name="slider" IsSelectionRangeEnabled="True" 

@@ -107,7 +107,7 @@ namespace AppMusic
             }
             else if(MediaPlayerManager.filePath == string.Empty)
             {
-                MediaPlayerManager.filePath = @"C:\Users\Laptop MSI\Downloads\ALoi.mp3";
+                MediaPlayerManager.filePath = "Music/ALoi.mp3";
                 MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
                 SetupTimer();
             }
@@ -166,7 +166,7 @@ namespace AppMusic
             // Xử lý khi giá trị của Slider thay đổi
             if (MediaPlayerManager.filePath == string.Empty)
             {
-                MediaPlayerManager.filePath = @"C:\Users\Laptop MSI\Downloads\ALoi.mp3"; //Test thử
+                MediaPlayerManager.filePath = "Music/ALoi.mp3"; //Test thử
                 MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
                 SetupTimer();
             }

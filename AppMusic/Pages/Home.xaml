@@ -53,13 +53,12 @@
                                 <ScrollViewer Margin="5" VerticalScrollBarVisibility="Hidden" >
                                     <!--Music list-->
                                     <StackPanel>
-                                        <uc:SongItem Number="1" Title="À Lôi" Time="3:56" MouseLeftButtonDown="SongItem_MouseLeftButtonDown"/>
-                                        <uc:SongItem Number="2" Title="Thanh Âm Miền Núi" Time="4:02"/>
-                                        <uc:SongItem Number="3" Title="Bad Girl" Time="3:29"/>
-                                        <uc:SongItem Number="4" Title="Người Miền Núi Chất" Time="4:32"/>
-                                        <uc:SongItem Number="5" Title="Chài Diếp Noọng" Time="5:11"/>
-                                        <uc:SongItem Number="6" Title="Tay-Lai PrO" Time="3:47"/>
-                                        <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                        <uc:SongItem x:Name="SongItem1" Number="1" Title="À Lôi" Time="3:56" MouseLeftButtonDown="SongItem1_MouseLeftButtonDown"/>
+                                        <uc:SongItem x:Name="SongItem2" Number="2" Title="Thanh Âm Miền Núi" Time="4:02" MouseLeftButtonDown="SongItem2_MouseLeftButtonDown"/>
+                                        <uc:SongItem x:Name="SongItem3" Number="3" Title="Người Miền Núi Chất" Time="4:32" MouseLeftButtonDown="SongItem3_MouseLeftButtonDown"/>
+                                        <uc:SongItem x:Name="SongItem4" Number="4" Title="Chài Diếp Noọng" Time="5:11" MouseLeftButtonDown="SongItem4_MouseLeftButtonDown"/>
+                                        <uc:SongItem x:Name="SongItem5" Number="5" Title="Tay-Lai PrO" Time="3:47" MouseLeftButtonDown="SongItem5_MouseLeftButtonDown"/>
+                                        <uc:SongItem x:Name="SongItem6" Number="6" Title="Kéo em về làm vợ" Time="4:23" MouseLeftButtonDown="SongItem6_MouseLeftButtonDown"/>
                                     </StackPanel>
                                 </ScrollViewer>
                             </Grid>

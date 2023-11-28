@@ -183,20 +183,26 @@
                                 </StackPanel>
                             </Grid>
 
-                            <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="0:00" FontSize="14" FontWeight="SemiBold" Foreground="#ffffff"/>
-                                <Slider HorizontalAlignment="Center" Margin="5 0 0 5"
-                                        Style="{DynamicResource SliderMusic}" x:Name="sliderPlayer"
+                            <Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="310"/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding PlayTiming}" FontSize="14" FontWeight="SemiBold" Foreground="#ffffff" HorizontalAlignment="Center"/>
+                                <Slider Grid.Column="1" HorizontalAlignment="Center" Margin="0 0 0 5"
+                                        Style="{DynamicResource SliderMusic}"
+                                        x:Name="sliderPlayer"
                                         Width="300" VerticalAlignment="Center"
-                                        Value="0" Minimum="0" Maximum="100"
+                                        Value="0" Minimum="0" Maximum="1000"
                                         ValueChanged="sliderPlayer_ValueChanged"
                                         PreviewMouseDown="sliderPlayer_PreviewMouseDown"
                                         PreviewMouseLeftButtonDown="sliderPlayer_PreviewMouseLeftButtonDown"
                                         PreviewMouseLeftButtonUp="sliderPlayer_PreviewMouseLeftButtonUp"
                                         SelectionEnd="{Binding ElementName=sliderPlayer,Path=Value}">
                                 </Slider>
-                                <TextBlock Text="3:51" FontSize="14" FontWeight="SemiBold" Foreground="#ffffff"/>
-                            </StackPanel>
+                                <TextBlock Grid.Column="2" Text="3:51" FontSize="14" FontWeight="SemiBold" Foreground="#ffffff" HorizontalAlignment="Center"/>
+                            </Grid>
                         </Grid>
                     </Grid>
 

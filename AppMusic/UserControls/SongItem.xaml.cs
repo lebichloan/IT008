@@ -45,9 +45,5 @@ namespace AppMusic.UserControls
         }
         public static readonly DependencyProperty IsActiveProperty = DependencyProperty.Register
             ("IsActive", typeof(bool), typeof(SongItem));
-
-
-
-
     }
 }

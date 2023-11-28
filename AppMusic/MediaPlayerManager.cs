@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using NAudio.Wave;
 
 namespace AppMusic
 {
@@ -43,7 +44,7 @@ namespace AppMusic
         {
             if(MediaPlayer != null) { 
                 IsPlaying = true;
-                MediaPlayer.Open(new Uri(filePath, UriKind.Absolute));
+                MediaPlayer.Open(new Uri(filePath, UriKind.Relative));
                 MediaPlayer.Volume = 1.0;
                 MediaPlayer.Play();
             }

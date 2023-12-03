@@ -269,6 +269,89 @@ namespace AppMusic
         }
 
         // Hết thời gian bài nhạc
-        
+        private void PlaySpeed_Click(object sender, RoutedEventArgs e)
+        {
+            speedPopup.IsOpen = true;
+        }
+
+        private void speed025_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MediaPlayerManager.MediaPlayer != null)
+            {
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 0.25f;
+                MediaPlayerManager.MediaPlayer.Play();
+            }
+        }
+
+        private void speed05_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if(MediaPlayerManager.MediaPlayer != null)
+            {
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 0.5f;
+                MediaPlayerManager.MediaPlayer.Play();
+            }
+        }
+
+        private void speed075_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MediaPlayerManager.MediaPlayer != null)
+            {
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 0.75f;
+                MediaPlayerManager.MediaPlayer.Play();
+            }
+        }
+
+        private void speed1_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MediaPlayerManager.MediaPlayer != null)
+            {
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 1;
+                MediaPlayerManager.MediaPlayer.Play();
+            }
+        }
+
+        private void speed125_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MediaPlayerManager.MediaPlayer != null)
+            {
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 1.25f;
+                MediaPlayerManager.MediaPlayer.Play();
+            }
+        }
+
+        private void speed15_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MediaPlayerManager.MediaPlayer != null)
+            {
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 1.5f;
+                MediaPlayerManager.MediaPlayer.Play();
+            }
+        }
+
+        private void speed175_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MediaPlayerManager.MediaPlayer != null)
+            {
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 1.75f;
+                MediaPlayerManager.MediaPlayer.Play();
+            }
+        }
+
+        private void speed2_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MediaPlayerManager.MediaPlayer != null)
+            {
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 2;
+                MediaPlayerManager.MediaPlayer.Play();
+            }
+        }
     }
 }

@@ -207,6 +207,30 @@
                     </Grid>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="2" FlowDirection="LeftToRight" HorizontalAlignment="Right">
+                        <Button x:Name="PlaySpeed" Style="{StaticResource playerButton}" Click="PlaySpeed_Click" >
+                            <Icon:PackIconMaterial Kind="PlaySpeed" Style="{StaticResource playerButtonIcon}" Height="20" Width="20"/>
+                        </Button>
+                        <Popup x:Name="speedPopup" PlacementTarget="{Binding ElementName=PlaySpeed}" 
+                               StaysOpen="False" Placement="Top"
+                               AllowsTransparency="True">
+                            <Grid>
+                                <Border Opacity="0.9" CornerRadius="10" Background="#F5F4F0" Width="200">
+                                    
+                                </Border>
+                                <StackPanel>
+                                    <TextBlock Text="    Tốc độ phát" FontSize="16" FontWeight="SemiBold" Foreground="#878784" Margin="0 10 0 10"/>
+                                    <Separator Width="200" BorderBrush="#878784" BorderThickness="3" Margin="0 0 0 5" Opacity="0.8"></Separator>
+                                    <TextBlock x:Name="speed025" Text="     0.25" Style="{StaticResource playSpeedText}" MouseLeftButtonDown="speed025_MouseLeftButtonDown"/>
+                                    <TextBlock x:Name="speed05" Text="     0.5" Style="{StaticResource playSpeedText}" MouseLeftButtonDown="speed05_MouseLeftButtonDown"/>
+                                    <TextBlock x:Name="speed075" Text="     0.75" Style="{StaticResource playSpeedText}" MouseLeftButtonDown="speed075_MouseLeftButtonDown"/>
+                                    <TextBlock x:Name="speed1" Text="     Chuẩn" Style="{StaticResource playSpeedText}" MouseLeftButtonDown="speed1_MouseLeftButtonDown"/>
+                                    <TextBlock x:Name="speed125" Text="     1.25" Style="{StaticResource playSpeedText}" MouseLeftButtonDown="speed125_MouseLeftButtonDown"/>
+                                    <TextBlock x:Name="speed15" Text="     1.5" Style="{StaticResource playSpeedText}" MouseLeftButtonDown="speed15_MouseLeftButtonDown"/>
+                                    <TextBlock x:Name="speed175" Text="     1.75" Style="{StaticResource playSpeedText}" MouseLeftButtonDown="speed175_MouseLeftButtonDown"/>
+                                    <TextBlock x:Name="speed2" Text="     2" Style="{StaticResource playSpeedText}" Margin="0 0 0 10" MouseLeftButtonDown="speed2_MouseLeftButtonDown"/>
+                                </StackPanel>
+                            </Grid>
+                        </Popup>
                         <Button x:Name="volumeButton" HorizontalAlignment="Right"
                                 Click="volumeButton_Click">
                             <Button.Style>

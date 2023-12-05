@@ -644,6 +644,32 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+            <Style x:Key="btnAdd" TargetType="Button">
+                <Setter Property="Height" Value="50"/>
+                <Setter Property="Width" Value="110"/>
+                <Setter Property="Background" Value="#00a85b"/>
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Tag" Value="Collapsed"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#18c274"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Tag" Value="Visible"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
 
     </Application.Resources>

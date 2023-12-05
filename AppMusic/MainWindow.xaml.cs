@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -103,9 +104,7 @@ namespace AppMusic
             }
             else if(MediaPlayerManager.filePath == string.Empty)
             {
-                MediaPlayerManager.filePath = "Music/ALoi.mp3";
-                MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
-                SetupTimer();
+                
             }
         }
 
@@ -345,7 +344,7 @@ namespace AppMusic
             if (MediaPlayerManager.MediaPlayer != null)
             {
                 MediaPlayerManager.MediaPlayer.Pause();
-                MediaPlayerManager.MediaPlayer.SpeedRatio = 2;
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 2f;
                 MediaPlayerManager.MediaPlayer.Play();
             }
         }
@@ -393,6 +392,7 @@ namespace AppMusic
                 listSong.ItemsSource = querAllSong.ToList();
                 lblPlaylistName.Text = "All song";
                 lblTotalSong.Text = querAllSong.ToList().Count.ToString();
+                
             }
             else
             {
@@ -407,7 +407,19 @@ namespace AppMusic
         
         private void listSong_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            try {
+                if(listSong.SelectedItem != null)
+                {
+                    SONG song = (SONG)listSong.SelectedItem;
+                    MediaPlayerManager.filePath = song.FilePath;
+                    MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                    tblNameSongPlaying.Text = song.SongName.ToString();
+                    tblNameArtistPlaying.Text = song.Artist.ToString();
+                }
+                
+            }
+            catch { }
+            
         }
 
         private void listPlaylist_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -418,6 +430,50 @@ namespace AppMusic
                 LoadAllSong(selectedPlaylist.idPlaylist);
                 lblPlaylistName.Text = selectedPlaylist.PlaylistName;
                 lblTotalSong.Text = selectedPlaylist.TotalSong.ToString();
+            }
+        }
+
+        private void btnNextSong_Click(object sender, RoutedEventArgs e)
+        {
+            if (listSong.SelectedIndex < listSong.Items.Count - 1)
+            {
+                listSong.SelectedIndex++;
+                SONG song = (SONG)listSong.SelectedItem;
+                MediaPlayerManager.filePath = song.FilePath;
+                MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                tblNameSongPlaying.Text = song.SongName.ToString();
+                tblNameArtistPlaying.Text = song.Artist.ToString();
+            }
+            else
+            {
+                listSong.SelectedIndex = 0;
+                SONG song = (SONG)listSong.SelectedItem;
+                MediaPlayerManager.filePath = song.FilePath;
+                MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                tblNameSongPlaying.Text = song.SongName.ToString();
+                tblNameArtistPlaying.Text = song.Artist.ToString();
+            }
+        }
+
+        private void btnPreviousSong_Click(object sender, RoutedEventArgs e)
+        {
+            if(listSong.SelectedIndex > 0)
+            {
+                listSong.SelectedIndex--;
+                SONG song = (SONG)listSong.SelectedItem;
+                MediaPlayerManager.filePath = song.FilePath;
+                MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                tblNameSongPlaying.Text = song.SongName.ToString();
+                tblNameArtistPlaying.Text = song.Artist.ToString();
+            }
+            else
+            {
+                listSong.SelectedIndex = listSong.Items.Count - 1;
+                SONG song = (SONG)listSong.SelectedItem;
+                MediaPlayerManager.filePath = song.FilePath;
+                MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                tblNameSongPlaying.Text = song.SongName.ToString();
+                tblNameArtistPlaying.Text = song.Artist.ToString();
             }
         }
     }

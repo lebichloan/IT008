@@ -11,7 +11,10 @@
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
         WindowStyle="None"
-        Height="735" Width="1263">
+        Height="735" Width="1263"
+        Name="mainWindow"
+        Loaded="mainWindow_Loaded"
+        >
     <Border CornerRadius="0" Background="White" MouseDown="Border_MouseDown">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -37,78 +40,116 @@
                 </Button>
             </StackPanel>
             
-            <!--Menu-->
-            <Border Grid.Row="1" Background="White" CornerRadius="20">
-                <StackPanel Margin="0 0 0 0">
-                    <!--Ellipses-->
-                    <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" Margin="63 15 0 0">
-                        <Ellipse Fill="#ff6258" Width="10" Height="10"/>
-                        <Ellipse Fill="#ffbf2f" Width="10" Height="10" Margin="7 0"/>
-                        <Ellipse Fill="#2acb43" Width="10" Height="10"/>
-                    </StackPanel>
-
-                    <TextBlock Text="LIBRARY" Style="{StaticResource menuTitle}" />
+            <Grid Grid.ColumnSpan="2"
+                  Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="450"/>
+                </Grid.ColumnDefinitions>
+                
+                <Grid Grid.Column="0" Margin="40 40 0 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="45"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
                     
-                    <RadioButton x:Name="btnHome" Style="{StaticResource menuRadioButton}" GroupName="menuOption" IsChecked="True" 
-                                 Click="btnHome_Click">
+                    <TextBlock Text="Home" Style="{StaticResource titleText}"></TextBlock>
+                                        
+                    <Border Grid.Row="1" CornerRadius="20" Margin="0 20 10 20" >
+                        <Border.Background>
+                            <LinearGradientBrush>
+                                <GradientStop Color="#30ad9a" Offset="0"/>
+                                <GradientStop Color="#18c274" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="20" Opacity="0.4" ShadowDepth="0" Color="#1fae7e"/>
+                        </Border.Effect>
                         <Grid>
-                            <TextBlock Text="Home" Margin="0 0 0 2"/>
-                            <Icon:PackIconMaterial Style="{StaticResource menuButtonIcon}"/>
-                        </Grid>
-                    </RadioButton>
+                            <Grid Margin="20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="70"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0" VerticalAlignment="Center">
+                                    <TextBlock 
+                                        x:Name="lblPlaylistName"
+                                        Text="Daily Singer" Foreground="White"
+                                                FontSize="26" FontWeight="Bold"/>
+                                    <TextBlock 
+                                        Name="lblTotalSong"
+                                        Text="Double2T" Foreground="#c0e6de"
+                                                FontSize="18" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                
+                                <Grid Grid.Row="1">
+                                    <ScrollViewer Margin="5" VerticalScrollBarVisibility="Hidden" >
+                                        <ListBox Name="listSong"
+                                             SelectionChanged="listSong_SelectionChanged">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="auto"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="auto"/>
+                                                        </Grid.ColumnDefinitions>
 
-                    <RadioButton Style="{StaticResource menuRadioButton}" GroupName="menuOption">
+                                                        <TextBlock Grid.Column="0" Foreground="#000" FontWeight="SemiBold" FontSize="16" Margin="5 0 30 0"
+                                                        Text="{Binding idSong}"/>
+                                                        <TextBlock Grid.Column="1" Foreground="#000" FontWeight="SemiBold" FontSize="16" Margin="0 0 0 2"
+                                                        Text="{Binding SongName}"/>
+                                                        <TextBlock Grid.Column="2" Foreground="#000" FontWeight="SemiBold" FontSize="16" Margin="0 0 5 2" HorizontalAlignment="Right"
+                                                        Text="{Binding TotalTime}"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+                <!--Right section-->
+                <Border Grid.Column="2" Grid.Row="1" CornerRadius="0 0 0 0" Background="White" Margin="0 22 10 0">
+
+                    <StackPanel Margin="30 27 30 0">
+                        <!--Popular-->
                         <Grid>
-                            <TextBlock Text="Playlists" Margin="0 0 0 2"/>
-                            <Icon:PackIconMaterial Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="All playlist" Style="{StaticResource titleText}" Margin="0 0 0 10" FontSize="28"/>
+
+                            <Button Grid.Row="0" 
+                                    HorizontalAlignment="Right"
+                                    Name="btnAddPlaylist"
+                                    Click="btnAddPlaylist_Click"
+                                    >
+                                <TextBlock>Add playlist</TextBlock>
+                            </Button>
+
                         </Grid>
-                    </RadioButton>
 
-                    <RadioButton Style="{StaticResource menuRadioButton}" GroupName="menuOption">
-                        <Grid>
-                            <TextBlock Text="Artists" Margin="0 0 0 2"/>
-                            <Icon:PackIconMaterial Style="{StaticResource menuButtonIcon}"/>
-                        </Grid>
-                    </RadioButton>
-
-                    <RadioButton Style="{StaticResource menuRadioButton}" GroupName="menuOption">
-                        <Grid>
-                            <TextBlock Text="Albums" Margin="0 0 0 2"/>
-                            <Icon:PackIconMaterial Style="{StaticResource menuButtonIcon}"/>
-                        </Grid>
-                    </RadioButton>
-
-                    <RadioButton Style="{StaticResource menuRadioButton}" GroupName="menuOption">
-                        <Grid>
-                            <TextBlock Text="Songs" Margin="0 0 0 2"/>
-                            <Icon:PackIconMaterial Style="{StaticResource menuButtonIcon}"/>
-                        </Grid>
-                    </RadioButton>
-
-                    <TextBlock Text="DISCOVER" Style="{StaticResource menuTitle}"/>
-
-                    <RadioButton Style="{StaticResource menuRadioButton}" GroupName="menuOption">
-                        <Grid>
-                            <TextBlock Text="Radio" Margin="0 0 0 2"/>
-                            <Icon:PackIconMaterial Style="{StaticResource menuButtonIcon}"/>
-                        </Grid>
-                    </RadioButton>
-
-                    <RadioButton Style="{StaticResource menuRadioButton}" GroupName="menuOption">
-                        <Grid>
-                            <TextBlock Text="For you" Margin="0 0 0 2"/>
-                            <Icon:PackIconMaterial Style="{StaticResource menuButtonIcon}"/>
-                        </Grid>
-                    </RadioButton>
-
-                </StackPanel>
-            </Border>
-
-            <Frame Grid.Row="1" Grid.Column="1" 
-                   x:Name="fContainerPage"
-                   NavigationUIVisibility="Hidden">
-            </Frame>
-            
+                        <ListBox
+                            x:Name="listPlaylist"
+                            SelectionChanged="listPlaylist_SelectionChanged"
+                            >
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <uc:PopularSong
+                                        Title="{Binding PlaylistName}"
+                                        Time="{Binding TotalSong}"                                        
+                                        />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <!--<uc:PopularSong Title="À Lôi" Time="3:56" Image="/Images/Song/ALoi.jpg" IsActive="True"/>
+                        <uc:PopularSong Title="We Don't Talk Anymore" Time="4:05" Image="/Images/Song/WDTA.jpg"/>
+                        <uc:PopularSong Title="Chúng Ta Của Hiện Tại" Time="6:18" Image="/Images/Artist/SonTungMTP.jpg"/>
+                        <uc:PopularSong Title="Chài Điếp Noọng" Time="5:11" Image="/Images/Song/ChaiDiepNoong.jpg"/>-->
+                    </StackPanel>
+                </Border>
+            </Grid>
 
             <!--Player-->
             <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" 

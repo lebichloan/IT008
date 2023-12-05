@@ -43,12 +43,12 @@ namespace AppMusic.Pages
         {
             for (int i = 0; i < songs.Length; i++)
             {
-                if (i == song - 1)
-                {
-                    songs[i].IsActive = true;
-                }
-                else
-                    songs[i].IsActive = false;
+                //if (i == song - 1)
+                //{
+                //    songs[i].IsActive = true;
+                //}
+                //else
+                //    songs[i].IsActive = false;
             }
             MediaPlayerManager.MediaPlayer.Stop();
         }

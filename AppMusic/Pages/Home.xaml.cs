@@ -31,7 +31,7 @@ namespace AppMusic.Pages
         public Home()
         {
             InitializeComponent();
-            songs = new SongItem[] { SongItem1, SongItem2, SongItem3, SongItem4, SongItem5, SongItem6 };
+            //songs = new SongItem[] { SongItem1, SongItem2, SongItem3, SongItem4, SongItem5, SongItem6 };
         }
 
         private void SongItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

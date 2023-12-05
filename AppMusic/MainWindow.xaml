@@ -74,12 +74,12 @@
                                 <StackPanel Grid.Row="0" VerticalAlignment="Center">
                                     <TextBlock 
                                         x:Name="lblPlaylistName"
-                                        Text="Daily Singer" Foreground="White"
-                                                FontSize="26" FontWeight="Bold"/>
+                                        Foreground="White"
+                                        FontSize="26" FontWeight="Bold"/>
                                     <TextBlock 
                                         Name="lblTotalSong"
-                                        Text="Double2T" Foreground="#c0e6de"
-                                                FontSize="18" FontWeight="SemiBold"/>
+                                        Foreground="#c0e6de"
+                                        FontSize="18" FontWeight="SemiBold"/>
                                 </StackPanel>
                                 
                                 <Grid Grid.Row="1">
@@ -88,12 +88,12 @@
                                              SelectionChanged="listSong_SelectionChanged">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Grid>
+                                                    <Grid Width="500">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="auto"/>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="auto"/>
+                                                            <ColumnDefinition Width="25"/>
                                                         </Grid.ColumnDefinitions>
 
                                                         <TextBlock Grid.Column="0" Foreground="#000" FontWeight="SemiBold" FontSize="16" Margin="5 0 30 0"
@@ -122,10 +122,18 @@
 
                             <Button Grid.Row="0" 
                                     HorizontalAlignment="Right"
+                                    Width="150"
+                                    Height="40"
+                                    Style="{DynamicResource ButtonStyle}"
                                     Name="btnAddPlaylist"
                                     Click="btnAddPlaylist_Click"
                                     >
-                                <TextBlock>Add playlist</TextBlock>
+                                <TextBlock
+                                    FontSize="15"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Text="Add playlist "
+                                    />
                             </Button>
 
                         </Grid>
@@ -138,7 +146,8 @@
                                 <DataTemplate>
                                     <uc:PopularSong
                                         Title="{Binding PlaylistName}"
-                                        Time="{Binding TotalSong}"                                        
+                                        Time="{Binding TotalSong}"  
+                                        IsActive="{Binding isSelected}"
                                         />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>

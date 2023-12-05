@@ -354,13 +354,22 @@ namespace AppMusic
         {
             AddPlaylist addPlaylist = new AddPlaylist();
             addPlaylist.ShowDialog();
-        }
 
+            LoadAllPlaylist();
+            LoadAllSong(0);
+        }
 
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             LoadAllPlaylist();
             LoadAllSong(0);
+        }
+
+        static string FomatTimeSpan(TimeSpan time)
+        {
+            return time.Hours == 0
+                ? $"{time.Minutes:D2}:{time.Seconds:D2}"
+                : $"{(int)time.TotalHours:D2}:{time.Minutes:D2}:{time.Seconds:D2}";
         }
 
         MUSICAPPEntities musicappentities = new MUSICAPPEntities();
@@ -382,6 +391,8 @@ namespace AppMusic
                                   select song;
 
                 listSong.ItemsSource = querAllSong.ToList();
+                lblPlaylistName.Text = "All song";
+                lblTotalSong.Text = querAllSong.ToList().Count.ToString();
             }
             else
             {
@@ -393,7 +404,7 @@ namespace AppMusic
                 listSong.ItemsSource = querAllSong.ToList();
             }
         }
-
+        
         private void listSong_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
@@ -405,6 +416,8 @@ namespace AppMusic
             {
                 var selectedPlaylist = (dynamic)listPlaylist.SelectedItem;
                 LoadAllSong(selectedPlaylist.idPlaylist);
+                lblPlaylistName.Text = selectedPlaylist.PlaylistName;
+                lblTotalSong.Text = selectedPlaylist.TotalSong.ToString();
             }
         }
     }

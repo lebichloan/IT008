@@ -36,7 +36,8 @@ namespace AppMusic
         private void SetValues()
         {
             txtPlaylistName.Text = string.Empty;
-            txtTotalSong.Text = "0";
+            lblTotalSong.Text = string.Format("Total song: {0}", listSong.Items.Count.ToString());
+            listSongExpander.IsExpanded = false;
             listSong.Items.Clear();
         }
 
@@ -63,7 +64,7 @@ namespace AppMusic
             }
             else
             {
-                MessageBox.Show("Vui long chon file", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Please choose file to continue", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -71,25 +72,42 @@ namespace AppMusic
         private void addSong_DataReturned(object sender, SONG e)
         {
             SONG newSong = e;
-            listSong.Items.Add(
-            new
-            {
-                STT = listSong.Items.Count + 1,
-                idSong = newSong.idSong,
-                SongName = newSong.SongName,
-                TotalTime = FomatTimeSpan(newSong.TotalTime),
-            });
+            SongItem songItem = new SongItem(listSong.Items.Count + 1, newSong.SongName, string.Format("{0}(s)", FomatTimeSpan(newSong.TotalTime)));
+            listSong.Items.Add(songItem);
+            //listSong.Items.Add(
+            //new
+            //{
+            //    STT = listSong.Items.Count + 1,
+            //    idSong = newSong.idSong,
+            //    SongName = newSong.SongName,
+            //    TotalTime = string.Format("{0}(s)", FomatTimeSpan(newSong.TotalTime)),
+            //});
+            listSongExpander.IsExpanded = true;
+            lblTotalSong.Text = string.Format("Total song: {0}", listSong.Items.Count.ToString());
             listSongPlaylist.Add(newSong);
         }
 
         private void btnDeleteSong_Click(object sender, RoutedEventArgs e)
         {
+            if (listSong.SelectedItems != null)
+            {
+                listSong.Items.Remove(listSong.SelectedItems[0]);
 
+            }
         }
 
+        private SongItem selectedSongItem = null;
         private void listSong_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            if (listSong.SelectedItems != null)
+            {
+                //var selectedSong = (dynamic)listSong.SelectedItems[0];
+                //selectedSongItem = new SongItem(listSong.SelectedItem[0]);
+            }
+            else
+            {
+                selectedSongItem = null;
+            }
         }
 
         MUSICAPPEntities mUSICAPPEntities = new MUSICAPPEntities();
@@ -98,27 +116,32 @@ namespace AppMusic
         {
             if (txtPlaylistName.Text == "")
             {
-                lblPlaylistName.Text = "Playlist name í required";
+                lblPlaylistName.Text = "Playlist name is required";
                 lblPlaylistName.Visibility = Visibility.Visible;
                 txtPlaylistName.Focus();
             }
+
             if (listSong.Items.Count == 0)
             {
-                MessageBox.Show("Vui long chon bai hat");
+                MessageBox.Show("Please add song to continue");
             }
-            PLAYLIST newPlaylist = CreatePlaylist();
-            mUSICAPPEntities.PLAYLISTs.Add(newPlaylist);
-            mUSICAPPEntities.SaveChanges();
-            int idLastPlaylist = GetLastIdPlaylist();
 
-            foreach(SONG song in listSongPlaylist)
+            if (txtPlaylistName.Text != "" && listSong.Items.Count > 0)
             {
-                song.idPlaylist = idLastPlaylist;
-                mUSICAPPEntities.SONGs.Add(song);
+                PLAYLIST newPlaylist = CreatePlaylist();
+                mUSICAPPEntities.PLAYLISTs.Add(newPlaylist);
                 mUSICAPPEntities.SaveChanges();
-            }
+                int idLastPlaylist = GetLastIdPlaylist();
 
-            Close();
+                foreach (SONG song in listSongPlaylist)
+                {
+                    song.idPlaylist = idLastPlaylist;
+                    mUSICAPPEntities.SONGs.Add(song);
+                    mUSICAPPEntities.SaveChanges();
+                }
+
+                Close();
+            }
         }
 
         private PLAYLIST CreatePlaylist()
@@ -150,7 +173,7 @@ namespace AppMusic
         {
             if (txtPlaylistName.Text == "")
             {
-                lblPlaylistName.Text = "Playlist name í required";
+                lblPlaylistName.Text = "Playlist name is required";
                 lblPlaylistName.Visibility = Visibility.Visible;
             }
             else

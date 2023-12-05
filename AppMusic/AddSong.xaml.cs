@@ -63,7 +63,7 @@ namespace AppMusic
         {
             txtSongName.Text = string.Empty;
             txtArtist.Text = string.Empty;
-            txtTotalTime.Text = FomatTimeSpan(GetTotalTime(selectedFilePath));
+            txtTotalTime.Text = string.Format("{0}(s)", FomatTimeSpan(GetTotalTime(selectedFilePath)));
             txtTotalTime.IsReadOnly = true;
         }
 
@@ -107,7 +107,6 @@ namespace AppMusic
             {
                 lblSongName.Text = "Song name is requried";
                 lblSongName.Visibility = Visibility.Visible;
-                //txtSongName.Focus();
             }
             else
             {

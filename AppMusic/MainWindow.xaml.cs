@@ -31,9 +31,26 @@ namespace AppMusic
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        // Khai báo các biến cần sử dụng
         public static MediaPlayerManager MediaPlayerManager { get; private set; }
         private bool isSliderDragged = false;
         private double volumePre;
+        private string _playTiming;
+        private DispatcherTimer timer;
+
+        public string PlayTiming
+        {
+            get
+            {
+                return _playTiming;
+            }
+            set
+            {
+                _playTiming = value;
+                OnPropertyChanged(nameof(PlayTiming));
+            }
+        }
         public MainWindow()
         {
             InitializeComponent();
@@ -42,6 +59,7 @@ namespace AppMusic
             volumePre = 0;
             MediaPlayerManager = new MediaPlayerManager();
             PausePlayMusic.DataContext = MediaPlayerManager;
+            PlayTiming = "0:00";
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
@@ -70,7 +88,7 @@ namespace AppMusic
             WindowState = WindowState.Minimized;
         }
         
-    // Dừng và phát nhạc
+        // Sự kiện nut dừng phát nhạc
         private void PausePlayMusic_Click(object sender, RoutedEventArgs e)
         {
             if(MediaPlayerManager.MediaPlayer != null && MediaPlayerManager.IsPlaying && MediaPlayerManager.filePath != string.Empty)
@@ -85,23 +103,24 @@ namespace AppMusic
             }
             else if(MediaPlayerManager.filePath == string.Empty)
             {
-                MediaPlayerManager.filePath = @"C:\Users\Laptop MSI\Downloads\ALoi.mp3";
+                MediaPlayerManager.filePath = "Music/ALoi.mp3";
                 MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
                 SetupTimer();
             }
         }
-        // Sự kiện xảy ra khi IsPlaying thay đổi giá trị
+
+
+        // Sự kiện xảy ra khi IsPlaying thay đổi giá trị(khi phát nhạc)
         private void MediaPlayerManager_IsPlayingChanged(object sender, EventArgs e)
         {
-
-            // Đồng thời gọi hàm này để slider chạy theo thời gian bài nhạc
             SetupTimer();
         }
+
 
         // Volume
         private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            MediaPlayerManager.MediaPlayer.Volume = slider.Value/100;
+            MediaPlayerManager.MediaPlayer.Volume = slider.Value/1000;
         }
 
         private void slider_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -118,15 +137,32 @@ namespace AppMusic
                 slider.Value = value;
             }
         }
-    // Hết Volume
-    
-    // Thời gian bài nhạc
+        // Thay đổi volume
+        private void volumeButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (MediaPlayerManager.MediaPlayer.Volume != 0)
+            {
+                volumePre = MediaPlayerManager.MediaPlayer.Volume;
+                MediaPlayerManager.MediaPlayer.Volume = 0;
+                slider.Value = 0;
+            }
+            else
+            {
+                MediaPlayerManager.MediaPlayer.Volume = volumePre;
+                slider.Value = volumePre * slider.Maximum;
+            }
+        }
+        // Hết Volume
+
+
+        // Thời gian bài nhạc
         private void sliderPlayer_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             // Xử lý khi giá trị của Slider thay đổi
             if (MediaPlayerManager.filePath == string.Empty)
             {
-                MediaPlayerManager.filePath = @"C:\Users\Laptop MSI\Downloads\ALoi.mp3";
+                MediaPlayerManager.filePath = "Music/ALoi.mp3"; //Test thử
                 MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
                 SetupTimer();
             }
@@ -142,7 +178,7 @@ namespace AppMusic
             {
                 // Tính toán và đặt vị trí của bài hát dựa trên giá trị mới của Slider
                 double totalDuration = MediaPlayerManager.MediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
-                double newTimeInSeconds = (newPosition / 100) * totalDuration;
+                double newTimeInSeconds = (newPosition / 1000) * totalDuration;
 
                 // Đặt vị trí của bài hát tại thời điểm mới
                 MediaPlayerManager.MediaPlayer.Position = TimeSpan.FromSeconds(newTimeInSeconds);
@@ -150,7 +186,6 @@ namespace AppMusic
             catch { }
             
         }
-        private DispatcherTimer timer;
 
         // Gọi hàm này khi bắt đầu phát nhạc
         private void SetupTimer()
@@ -163,20 +198,40 @@ namespace AppMusic
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            
-            if (!isSliderDragged) // Chỉ cập nhật khi slider không được kéo
-            {
-                double currentMusicPosition = MediaPlayerManager.MediaPlayer.Position.TotalSeconds;
-                double totalDuration = MediaPlayerManager.MediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
 
-                if (totalDuration > 0)
+            if (!isSliderDragged)
+            {
+                // Kiểm tra xem trình phát nhạc có đang chạy không
+                if (MediaPlayerManager.MediaPlayer != null && MediaPlayerManager.MediaPlayer.Source != null)
                 {
-                    double newPosition = (currentMusicPosition / totalDuration) * 100;
-                    sliderPlayer.Value = newPosition;
+                    // Kiểm tra xem NaturalDuration có giá trị Automatic không
+                    if (MediaPlayerManager.MediaPlayer.NaturalDuration.HasTimeSpan)
+                    {
+                        double currentMusicPosition = MediaPlayerManager.MediaPlayer.Position.TotalSeconds;
+                        double totalDuration = MediaPlayerManager.MediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
+
+                        if (totalDuration > 0)
+                        {
+                            double newPosition = (currentMusicPosition / totalDuration) * 1000;
+                            sliderPlayer.Value = newPosition;
+                            UpdatePlayTiming();
+                        }
+                    }
                 }
+            }
+
+        }
+        // Update thời gian phát nhạc
+        private void UpdatePlayTiming()
+        {
+            if (MediaPlayerManager.MediaPlayer.Source != null && MediaPlayerManager.MediaPlayer.NaturalDuration.HasTimeSpan)
+            {
+                TimeSpan currentPosition = MediaPlayerManager.MediaPlayer.Position;
+                PlayTiming = currentPosition.ToString(@"m\:ss");
             }
         }
 
+        // Sự kiện ấn vào một vị trí ở trên slider
         private void sliderPlayer_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -193,6 +248,7 @@ namespace AppMusic
         }
         private void sliderPlayer_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            // Khi kéo thì nhạc vẫn phát bình thường, khi thả chuột thì nhạc mới cập nhật vị trí
             isSliderDragged = true;
         }
 
@@ -203,26 +259,97 @@ namespace AppMusic
                 double newPosition = sliderPlayer.Value;
                 UpdateMusicPosition(newPosition);
                 isSliderDragged = false;
+                UpdatePlayTiming();
+
             }
         }
 
         // Hết thời gian bài nhạc
-        private void volumeButton_Click(object sender, RoutedEventArgs e)
+        private void PlaySpeed_Click(object sender, RoutedEventArgs e)
         {
+            speedPopup.IsOpen = true;
+        }
 
-            if(MediaPlayerManager.MediaPlayer.Volume != 0)
+        private void speed025_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MediaPlayerManager.MediaPlayer != null)
             {
-                volumePre = MediaPlayerManager.MediaPlayer.Volume;
-                MediaPlayerManager.MediaPlayer.Volume = 0;
-                slider.Value = 0;
-            }
-            else
-            {
-                MediaPlayerManager.MediaPlayer.Volume = volumePre;
-                slider.Value = volumePre*slider.Maximum;
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 0.25f;
+                MediaPlayerManager.MediaPlayer.Play();
             }
         }
 
+        private void speed05_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if(MediaPlayerManager.MediaPlayer != null)
+            {
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 0.5f;
+                MediaPlayerManager.MediaPlayer.Play();
+            }
+        }
+
+        private void speed075_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MediaPlayerManager.MediaPlayer != null)
+            {
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 0.75f;
+                MediaPlayerManager.MediaPlayer.Play();
+            }
+        }
+
+        private void speed1_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MediaPlayerManager.MediaPlayer != null)
+            {
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 1;
+                MediaPlayerManager.MediaPlayer.Play();
+            }
+        }
+
+        private void speed125_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MediaPlayerManager.MediaPlayer != null)
+            {
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 1.25f;
+                MediaPlayerManager.MediaPlayer.Play();
+            }
+        }
+
+        private void speed15_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MediaPlayerManager.MediaPlayer != null)
+            {
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 1.5f;
+                MediaPlayerManager.MediaPlayer.Play();
+            }
+        }
+
+        private void speed175_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MediaPlayerManager.MediaPlayer != null)
+            {
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 1.75f;
+                MediaPlayerManager.MediaPlayer.Play();
+            }
+        }
+
+        private void speed2_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MediaPlayerManager.MediaPlayer != null)
+            {
+                MediaPlayerManager.MediaPlayer.Pause();
+                MediaPlayerManager.MediaPlayer.SpeedRatio = 2;
+                MediaPlayerManager.MediaPlayer.Play();
+            }
+        }
+        
         private void btnAddPlaylist_Click(object sender, RoutedEventArgs e)
         {
             AddPlaylist addPlaylist = new AddPlaylist();

@@ -40,7 +40,7 @@
                         <DropShadowEffect BlurRadius="20" Opacity="0.4" ShadowDepth="0" Color="#1fae7e"/>
                     </Border.Effect>
                     <Grid>
-                        <Border Opacity="0.3" CornerRadius="20">
+                        <Border Opacity="0.4" CornerRadius="20">
                             <Border.Background>
                                 <ImageBrush ImageSource="/Images/Artist/Double2T.png"/>
                             </Border.Background>

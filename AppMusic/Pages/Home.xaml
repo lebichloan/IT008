@@ -22,6 +22,13 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="Home" Style="{StaticResource titleText}"></TextBlock>
+                <Button Grid.Row="0" 
+                        HorizontalAlignment="Right"
+                        Name="btnLoadPlaylist"
+                        Click="btnLoadPlaylist_Click"
+                        >
+                    <TextBlock>Load music</TextBlock>
+                </Button>
                 <Border Grid.Row="1" CornerRadius="20" Margin="0 20 10 20" >
                     <Border.Background>
                         <LinearGradientBrush>
@@ -51,15 +58,45 @@
                             </StackPanel>
                             <Grid Grid.Row="1">
                                 <ScrollViewer Margin="5" VerticalScrollBarVisibility="Hidden" >
-                                    <!--Music list-->
+                                    <!--Music list--><!--
                                     <StackPanel>
-                                        <uc:SongItem x:Name="SongItem1" Number="1" Title="À Lôi" Time="3:56" MouseLeftButtonDown="SongItem1_MouseLeftButtonDown"/>
-                                        <uc:SongItem x:Name="SongItem2" Number="2" Title="Thanh Âm Miền Núi" Time="4:02" MouseLeftButtonDown="SongItem2_MouseLeftButtonDown"/>
-                                        <uc:SongItem x:Name="SongItem3" Number="3" Title="Người Miền Núi Chất" Time="4:32" MouseLeftButtonDown="SongItem3_MouseLeftButtonDown"/>
-                                        <uc:SongItem x:Name="SongItem4" Number="4" Title="Chài Diếp Noọng" Time="5:11" MouseLeftButtonDown="SongItem4_MouseLeftButtonDown"/>
-                                        <uc:SongItem x:Name="SongItem5" Number="5" Title="Tay-Lai PrO" Time="3:47" MouseLeftButtonDown="SongItem5_MouseLeftButtonDown"/>
-                                        <uc:SongItem x:Name="SongItem6" Number="6" Title="Kéo em về làm vợ" Time="4:23" MouseLeftButtonDown="SongItem6_MouseLeftButtonDown"/>
-                                    </StackPanel>
+                                        <uc:SongItem Number="1" Title="À Lôi" Time="3:56" MouseLeftButtonDown="SongItem_MouseLeftButtonDown"/>
+                                        <uc:SongItem Number="2" Title="Thanh Âm Miền Núi" Time="4:02"/>
+                                        <uc:SongItem Number="3" Title="Bad Girl" Time="3:29"/>
+                                        <uc:SongItem Number="4" Title="Người Miền Núi Chất" Time="4:32"/>
+                                        <uc:SongItem Number="5" Title="Chài Diếp Noọng" Time="5:11"/>
+                                        <uc:SongItem Number="6" Title="Tay-Lai PrO" Time="3:47"/>
+                                        <uc:SongItem Number="7" Title="Kéo em về làm vợ" Time="4:23"/>
+                                    </StackPanel>-->
+                                    <ListBox Name="playlistListBox"
+                                             SelectionChanged="playlistListBox_SelectionChanged">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBlock Grid.Column="0" Foreground="#000" FontWeight="SemiBold" FontSize="16" Margin="5 0 30 0"
+                                                        Text="{Binding IdPlaylist}"/>
+                                                    <TextBlock Grid.Column="1" Foreground="#000" FontWeight="SemiBold" FontSize="16" Margin="0 0 0 2"
+                                                        Text="{Binding PlaylistName}"/>
+                                                    <TextBlock Grid.Column="2" Foreground="#000" FontWeight="SemiBold" FontSize="16" Margin="0 0 5 2" HorizontalAlignment="Right"
+                                                        Text="{Binding TotalTime}"/>
+                                                    <Button Grid.Column="3"
+                                                            Name="btnDeletePlaylist"
+                                                            Click="btnDeletePlaylist_Click">
+                                                        <Icon:PackIconMaterial
+                                                            Kind="Delete"
+                                                        />
+                                                    </Button>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
                                 </ScrollViewer>
                             </Grid>
                         </Grid>

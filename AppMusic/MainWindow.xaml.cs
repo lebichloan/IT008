@@ -15,6 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using AppMusic.Pages;
+using Microsoft.Win32;
+using NAudio.Wave;
 
 namespace AppMusic
 {
@@ -53,7 +55,6 @@ namespace AppMusic
         {
             InitializeComponent();
             this.DataContext = this;
-            fContainerPage.Navigate(new System.Uri("Pages/Home.xaml", UriKind.RelativeOrAbsolute));
             MediaPlayerManager.IsPlayingChanged += MediaPlayerManager_IsPlayingChanged;
             volumePre = 0;
             MediaPlayerManager = new MediaPlayerManager();
@@ -85,11 +86,6 @@ namespace AppMusic
         private void ButtonMinimize_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
-        }
-
-        private void btnHome_Click(object sender, RoutedEventArgs e)
-        {
-            fContainerPage.Navigate(new System.Uri("Pages/Home.xaml", UriKind.RelativeOrAbsolute));
         }
         
         // Sự kiện nut dừng phát nhạc
@@ -352,6 +348,48 @@ namespace AppMusic
                 MediaPlayerManager.MediaPlayer.SpeedRatio = 2;
                 MediaPlayerManager.MediaPlayer.Play();
             }
+        }
+        
+        private void btnAddPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            AddPlaylist addPlaylist = new AddPlaylist();
+            addPlaylist.ShowDialog();
+        }
+
+
+        private void mainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadAllPlaylist();
+            LoadAllSong();
+        }
+
+        MUSICAPPEntities musicappentities = new MUSICAPPEntities();
+        private void LoadAllPlaylist()
+        {
+            var queryallplaylist = from playlist in musicappentities.PLAYLISTs
+                                   orderby playlist.idPlaylist
+                                   select playlist;
+
+            listPlaylist.ItemsSource = queryallplaylist.ToList();
+        }
+
+        private void LoadAllSong()
+        {
+            var querAllSong = from song in musicappentities.SONGs
+                              orderby song.idSong
+                              select song;
+
+            listSong.ItemsSource = querAllSong.ToList();
+        }
+
+        private void listSong_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void listPlaylist_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

@@ -262,6 +262,7 @@
     <Compile Include="AddSong.xaml.cs">
       <DependentUpon>AddSong.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataProvider.cs" />
     <Compile Include="MediaPlayerManager.cs" />
     <Compile Include="MusicApp.Context.cs">
       <AutoGen>True</AutoGen>

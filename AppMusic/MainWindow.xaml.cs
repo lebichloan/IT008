@@ -360,7 +360,7 @@ namespace AppMusic
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             LoadAllPlaylist();
-            LoadAllSong();
+            LoadAllSong(0);
         }
 
         MUSICAPPEntities musicappentities = new MUSICAPPEntities();
@@ -373,13 +373,25 @@ namespace AppMusic
             listPlaylist.ItemsSource = queryallplaylist.ToList();
         }
 
-        private void LoadAllSong()
+        private void LoadAllSong(int idPlaylist)
         {
-            var querAllSong = from song in musicappentities.SONGs
-                              orderby song.idSong
-                              select song;
+            if (idPlaylist == 0)
+            {
+                var querAllSong = from song in musicappentities.SONGs
+                                  orderby song.idSong
+                                  select song;
 
-            listSong.ItemsSource = querAllSong.ToList();
+                listSong.ItemsSource = querAllSong.ToList();
+            }
+            else
+            {
+                var querAllSong = from song in musicappentities.SONGs
+                                  where song.idPlaylist == idPlaylist
+                                  orderby song.idSong
+                                  select song;
+
+                listSong.ItemsSource = querAllSong.ToList();
+            }
         }
 
         private void listSong_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -389,7 +401,11 @@ namespace AppMusic
 
         private void listPlaylist_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            if (listPlaylist.SelectedItem != null)
+            {
+                var selectedPlaylist = (dynamic)listPlaylist.SelectedItem;
+                LoadAllSong(selectedPlaylist.idPlaylist);
+            }
         }
     }
 }

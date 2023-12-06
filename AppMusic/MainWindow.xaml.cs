@@ -510,9 +510,10 @@ namespace AppMusic
         {
 
         }
-
+        MUSICAPPEntities mUSICAPPEntities = new MUSICAPPEntities();
         private void btnAddFolder_Click(object sender, RoutedEventArgs e)
         {
+            
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
             dialog.InitialDirectory = "C:\\Users";
             dialog.IsFolderPicker = true;
@@ -520,22 +521,79 @@ namespace AppMusic
             {
                 MessageBox.Show("You selected: " + dialog.FileName);
             }
+            PLAYLIST newPlaylist = CreatePlaylist(dialog.FileName);
+            newPlaylist.idPlaylist = GetLastIdPlaylist();
+            mUSICAPPEntities.PLAYLISTs.Add(newPlaylist);
+            mUSICAPPEntities.SaveChanges();
+
+
             string directory = dialog.FileName;
             string[] musicFiles = Directory.GetFiles(directory, "*.mp3");
             foreach (string musicFile in musicFiles)
             {
+
+                SONG temp = new SONG();
                 using (var mp3 = new Mp3(musicFile))
                 {
                     Id3Tag tag = mp3.GetTag(Id3TagFamily.Version2X);
                     if (tag != null)
                     {
-                        MessageBox.Show(System.IO.Path.GetFileNameWithoutExtension(musicFile));
-                        MessageBox.Show("Artist: " + tag.Artists);
-                        MessageBox.Show("Album: " + tag.Album);
+                        temp.SongName = tag.Title;
+                        temp.Artist = tag.Artists;
+                        
                     }
 
                 }
+                temp.idPlaylist = newPlaylist.idPlaylist;
+                temp.Created = DateTime.Now;
+                temp.TotalTime = (TimeSpan)GetTotalTime(musicFile);
+                mUSICAPPEntities.SONGs.Add(temp);
+                mUSICAPPEntities.SaveChanges();
             }
         }
+
+        private PLAYLIST CreatePlaylist(string path)
+        {
+            PLAYLIST playlist = new PLAYLIST();
+            playlist.PlaylistName = System.IO.Path.GetFileNameWithoutExtension(path);
+            playlist.TotalSong = Directory.GetFiles(path, "*.mp3").Length;
+            playlist.Created = DateTime.Now;
+            return playlist;
+        }
+
+        private int GetLastIdPlaylist()
+        {
+
+            var query = from playlist in mUSICAPPEntities.PLAYLISTs
+                        orderby playlist.idPlaylist descending
+                        select new
+                        {
+                            idPlaylist = playlist.idPlaylist,
+                        };
+            var lastPlaylist = query.FirstOrDefault();
+            if (lastPlaylist != null)
+            {
+                return lastPlaylist.idPlaylist;
+            }
+            return 0;
+        }
+        private TimeSpan GetTotalTime(string filePath)
+        {
+            try
+            {
+                Mp3FileReader mp3FileReader = new Mp3FileReader(filePath);
+                return mp3FileReader.TotalTime;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return TimeSpan.Zero;
+        }
+
+        
+
+        
+        
     }
 }

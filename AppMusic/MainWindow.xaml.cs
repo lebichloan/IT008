@@ -20,6 +20,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using AppMusic.Pages;
 using Microsoft.Win32;
 using NAudio.Wave;
+using Id3;
 
 namespace AppMusic
 {
@@ -518,6 +519,22 @@ namespace AppMusic
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 MessageBox.Show("You selected: " + dialog.FileName);
+            }
+            string directory = dialog.FileName;
+            string[] musicFiles = Directory.GetFiles(directory, "*.mp3");
+            foreach (string musicFile in musicFiles)
+            {
+                using (var mp3 = new Mp3(musicFile))
+                {
+                    Id3Tag tag = mp3.GetTag(Id3TagFamily.Version2X);
+                    if (tag != null)
+                    {
+                        MessageBox.Show(System.IO.Path.GetFileNameWithoutExtension(musicFile));
+                        MessageBox.Show("Artist: " + tag.Artists);
+                        MessageBox.Show("Album: " + tag.Album);
+                    }
+
+                }
             }
         }
     }

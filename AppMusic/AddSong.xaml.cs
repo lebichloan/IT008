@@ -1,6 +1,8 @@
-﻿using NAudio.Wave;
+﻿using Id3;
+using NAudio.Wave;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,8 +63,24 @@ namespace AppMusic
         
         private void SetValue()
         {
-            txtSongName.Text = string.Empty;
-            txtArtist.Text = string.Empty;
+            
+            using (var mp3 = new Mp3(selectedFilePath))
+            {
+                Id3Tag tag = mp3.GetTag(Id3TagFamily.Version2X);
+                if (tag != null)
+                {
+                    txtSongName.Text = tag.Title;
+                    txtArtist.Text = tag.Artists;
+                    MessageBox.Show("Album: " + tag.Album);
+                }
+                else
+                {
+                    txtSongName.Text = System.IO.Path.GetFileNameWithoutExtension(selectedFilePath);
+                    txtArtist.Text = tag.Artists;
+                }
+
+            }
+            
             txtTotalTime.Text = string.Format("{0}(s)", FomatTimeSpan(GetTotalTime(selectedFilePath)));
             txtTotalTime.IsReadOnly = true;
         }

@@ -542,14 +542,22 @@ namespace AppMusic
                         temp.Artist = tag.Artists;
                         
                     }
+                    else
+                    {
+                        temp.SongName= System.IO.Path.GetFileNameWithoutExtension(musicFile);
+                        temp.Artist = "";
+                    }
 
                 }
+                temp.FilePath = musicFile;
                 temp.idPlaylist = newPlaylist.idPlaylist;
                 temp.Created = DateTime.Now;
                 temp.TotalTime = (TimeSpan)GetTotalTime(musicFile);
                 mUSICAPPEntities.SONGs.Add(temp);
                 mUSICAPPEntities.SaveChanges();
             }
+            LoadAllPlaylist();
+            LoadAllSong(newPlaylist.idPlaylist);
         }
 
         private PLAYLIST CreatePlaylist(string path)

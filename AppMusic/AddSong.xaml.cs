@@ -76,7 +76,7 @@ namespace AppMusic
                 else
                 {
                     txtSongName.Text = System.IO.Path.GetFileNameWithoutExtension(selectedFilePath);
-                    txtArtist.Text = tag.Artists;
+                    txtArtist.Text = "";
                 }
 
             }

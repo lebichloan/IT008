@@ -24,8 +24,8 @@ namespace AppMusic
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    
-    public partial class MainWindow : Window,INotifyPropertyChanged
+
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
@@ -61,11 +61,35 @@ namespace AppMusic
             MediaPlayerManager = new MediaPlayerManager();
             PausePlayMusic.DataContext = MediaPlayerManager;
             PlayTiming = "0:00";
+            MediaPlayerManager.MediaPlayer.MediaEnded += OnMediaEnded;
+        }
+
+        private void OnMediaEnded(object sender, EventArgs e)
+        {
+            //throw new NotImplementedException();
+            if (listSong.SelectedIndex < listSong.Items.Count - 1)
+            {
+                listSong.SelectedIndex++;
+                SONG song = (SONG)listSong.SelectedItem;
+                MediaPlayerManager.filePath = song.FilePath;
+                MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                tblNameSongPlaying.Text = song.SongName.ToString();
+                tblNameArtistPlaying.Text = song.Artist.ToString();
+            }
+            else
+            {
+                listSong.SelectedIndex = 0;
+                SONG song = (SONG)listSong.SelectedItem;
+                MediaPlayerManager.filePath = song.FilePath;
+                MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                tblNameSongPlaying.Text = song.SongName.ToString();
+                tblNameArtistPlaying.Text = song.Artist.ToString();
+            }
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.ChangedButton == MouseButton.Left)
+            if (e.ChangedButton == MouseButton.Left)
             {
                 this.DragMove();
             }
@@ -88,23 +112,23 @@ namespace AppMusic
         {
             WindowState = WindowState.Minimized;
         }
-        
+
         // Sự kiện nut dừng phát nhạc
         private void PausePlayMusic_Click(object sender, RoutedEventArgs e)
         {
-            if(MediaPlayerManager.MediaPlayer != null && MediaPlayerManager.IsPlaying && MediaPlayerManager.filePath != string.Empty)
+            if (MediaPlayerManager.MediaPlayer != null && MediaPlayerManager.IsPlaying && MediaPlayerManager.filePath != string.Empty)
             {
                 MediaPlayerManager.MediaPlayer.Pause();
                 MediaPlayerManager.IsPlaying = false;
             }
-            else if(MediaPlayerManager.MediaPlayer != null && !MediaPlayerManager.IsPlaying && MediaPlayerManager.filePath != string.Empty)
+            else if (MediaPlayerManager.MediaPlayer != null && !MediaPlayerManager.IsPlaying && MediaPlayerManager.filePath != string.Empty)
             {
                 MediaPlayerManager.MediaPlayer.Play();
                 MediaPlayerManager.IsPlaying = true;
             }
-            else if(MediaPlayerManager.filePath == string.Empty)
+            else if (MediaPlayerManager.filePath == string.Empty)
             {
-                
+
             }
         }
 
@@ -119,7 +143,7 @@ namespace AppMusic
         // Volume
         private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            MediaPlayerManager.MediaPlayer.Volume = slider.Value/1000;
+            MediaPlayerManager.MediaPlayer.Volume = slider.Value / 1000;
         }
 
         private void slider_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -183,7 +207,7 @@ namespace AppMusic
                 MediaPlayerManager.MediaPlayer.Position = TimeSpan.FromSeconds(newTimeInSeconds);
             }
             catch { }
-            
+
         }
 
         // Gọi hàm này khi bắt đầu phát nhạc
@@ -281,7 +305,7 @@ namespace AppMusic
 
         private void speed05_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if(MediaPlayerManager.MediaPlayer != null)
+            if (MediaPlayerManager.MediaPlayer != null)
             {
                 MediaPlayerManager.MediaPlayer.Pause();
                 MediaPlayerManager.MediaPlayer.SpeedRatio = 0.5f;
@@ -348,7 +372,7 @@ namespace AppMusic
                 MediaPlayerManager.MediaPlayer.Play();
             }
         }
-        
+
         private void btnAddPlaylist_Click(object sender, RoutedEventArgs e)
         {
             AddPlaylist addPlaylist = new AddPlaylist();
@@ -392,7 +416,7 @@ namespace AppMusic
                 listSong.ItemsSource = querAllSong.ToList();
                 lblPlaylistName.Text = "All song";
                 lblTotalSong.Text = querAllSong.ToList().Count.ToString();
-                
+
             }
             else
             {
@@ -404,22 +428,24 @@ namespace AppMusic
                 listSong.ItemsSource = querAllSong.ToList();
             }
         }
-        
+
         private void listSong_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            try {
-                if(listSong.SelectedItem != null)
+            try
+            {
+                if (listSong.SelectedItem != null)
                 {
                     SONG song = (SONG)listSong.SelectedItem;
                     MediaPlayerManager.filePath = song.FilePath;
                     MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
                     tblNameSongPlaying.Text = song.SongName.ToString();
                     tblNameArtistPlaying.Text = song.Artist.ToString();
+                    tblTotalTime.Text = FomatTimeSpan(song.TotalTime).ToString();
                 }
-                
+
             }
             catch { }
-            
+
         }
 
         private void listPlaylist_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -457,7 +483,7 @@ namespace AppMusic
 
         private void btnPreviousSong_Click(object sender, RoutedEventArgs e)
         {
-            if(listSong.SelectedIndex > 0)
+            if (listSong.SelectedIndex > 0)
             {
                 listSong.SelectedIndex--;
                 SONG song = (SONG)listSong.SelectedItem;
@@ -475,6 +501,11 @@ namespace AppMusic
                 tblNameSongPlaying.Text = song.SongName.ToString();
                 tblNameArtistPlaying.Text = song.Artist.ToString();
             }
+        }
+
+        private void ShuffleButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

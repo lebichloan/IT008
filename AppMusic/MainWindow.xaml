@@ -322,18 +322,25 @@
                                     Orientation="Horizontal">
                                     <Button x:Name="ShuffleButton" Click="ShuffleButton_Click">
                                         <Button.Style>
-                                            <Style BasedOn="{StaticResource playerButton}" TargetType="Button">
+                                            <Style TargetType="Button" BasedOn="{StaticResource playerButton}">
                                                 <Setter Property="Content">
                                                     <Setter.Value>
-                                                        <Icon:PackIconMaterial Kind="ShuffleDisabled" Style="{StaticResource playerButtonIcon}" />
+                                                        <Icon:PackIconMaterial Kind="ShuffleDisabled" Style="{StaticResource playerButtonIcon}"/>
                                                     </Setter.Value>
                                                 </Setter>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsPressed}" />
+                                                    <DataTrigger Binding="{Binding IsShuffle, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Icon:PackIconMaterial Kind="Shuffle" Style="{StaticResource playerButtonIcon}"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </Button.Style>
                                     </Button>
+
                                     <Button
                                         x:Name="btnPreviousSong"
                                         Click="btnPreviousSong_Click"
@@ -368,6 +375,7 @@
                                         Style="{StaticResource playerButton}">
                                         <Icon:PackIconMaterial Kind="SkipNext" Style="{StaticResource playerButtonIcon}" />
                                     </Button>
+                                    
                                     <Button x:Name="RepeatButton" Style="{StaticResource playerButton}">
                                         <Icon:PackIconMaterial Kind="RepeatOff" Style="{StaticResource playerButtonIcon}" />
                                     </Button>

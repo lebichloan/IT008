@@ -42,6 +42,9 @@ namespace AppMusic
         private double volumePre;
         private string _playTiming;
         private DispatcherTimer timer;
+        private bool isShuffle = false;
+        public bool IsShuffle { get { return isShuffle; } set { isShuffle = value; OnPropertyChanged(nameof(IsShuffle)); } }
+
 
         public string PlayTiming
         {
@@ -418,11 +421,18 @@ namespace AppMusic
 
                 listSong.ItemsSource = querAllSong.ToList();
                 lblPlaylistName.Text = "All song";
-                lblTotalSong.Text = querAllSong.ToList().Count.ToString();
-
+                if(querAllSong.ToList().Count == 0)
+                {
+                    lblTotalSong.Text = "";
+                }
+                else
+                {
+                    lblTotalSong.Text = querAllSong.ToList().Count.ToString();
+                }
             }
             else
             {
+                isShuffle = false;
                 var querAllSong = from song in musicappentities.SONGs
                                   where song.idPlaylist == idPlaylist
                                   orderby song.idSong
@@ -455,6 +465,7 @@ namespace AppMusic
         {
             if (listPlaylist.SelectedItem != null)
             {
+                IsShuffle = false;
                 var selectedPlaylist = (dynamic)listPlaylist.SelectedItem;
                 LoadAllSong(selectedPlaylist.idPlaylist);
                 lblPlaylistName.Text = selectedPlaylist.PlaylistName;
@@ -506,10 +517,6 @@ namespace AppMusic
             }
         }
 
-        private void ShuffleButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
         MUSICAPPEntities mUSICAPPEntities = new MUSICAPPEntities();
         private void btnAddFolder_Click(object sender, RoutedEventArgs e)
         {
@@ -599,9 +606,71 @@ namespace AppMusic
             return TimeSpan.Zero;
         }
 
-        
+        private void ShuffleButton_Click(object sender, RoutedEventArgs e)
+        {
+            IsShuffle = !IsShuffle;
+            //bool IsPlaylistShuffed = false;
 
-        
-        
+
+            if (listPlaylist.SelectedIndex == -1)
+            {
+                var querAllSong = from song in musicappentities.SONGs
+                                  orderby song.idSong
+                                  select song;
+                var list = querAllSong.ToList();
+                if (IsShuffle)
+                {
+                    var mappingList = list;
+                    List<SONG> shuffledList = new List<SONG>();
+                    Random r = new Random();
+
+                    while (mappingList.Count > 0)
+                    {
+                        int index = r.Next(mappingList.Count);
+                        shuffledList.Add(mappingList[index]);
+                        mappingList.RemoveAt(index);
+                    }
+
+                    listSong.ItemsSource = shuffledList;
+                }
+                else
+                {
+                    listSong.ItemsSource = list;
+                }
+            }
+            else
+            {
+                PLAYLIST temp = (PLAYLIST)listPlaylist.SelectedItem;
+                var querAllSong = from song in musicappentities.SONGs
+                                  where song.idPlaylist == temp.idPlaylist
+                                  orderby song.idSong
+                                  select song;
+                var list = querAllSong.ToList();
+                if (IsShuffle)
+                {
+                    var mappingList = list;
+                    List<SONG> shuffledList = new List<SONG>();
+                    Random r = new Random();
+
+                    while (mappingList.Count > 0)
+                    {
+                        int index = r.Next(mappingList.Count);
+                        shuffledList.Add(mappingList[index]);
+                        mappingList.RemoveAt(index);
+                    }
+
+                    listSong.ItemsSource = shuffledList;
+                }
+                else
+                {
+                    listSong.ItemsSource = list;
+                }
+            }
+        }
+
+
+
+
+
     }
 }

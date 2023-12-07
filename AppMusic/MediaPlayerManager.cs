@@ -19,6 +19,7 @@ namespace AppMusic
         {
             get { return _mediaPlayer; }
             set { _mediaPlayer = value; }
+
         }
 
         public static bool IsPlaying
@@ -45,7 +46,6 @@ namespace AppMusic
             if(MediaPlayer != null) { 
                 IsPlaying = true;
                 MediaPlayer.Open(new Uri(filePath, UriKind.Relative));
-                MediaPlayer.Volume = 1.0;
                 MediaPlayer.Play();
             }
         }

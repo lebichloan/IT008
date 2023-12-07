@@ -566,7 +566,7 @@
                             SelectionEnd="{Binding ElementName=slider, Path=Value}"
                             Style="{DynamicResource SliderVolume}"
                             ValueChanged="slider_ValueChanged"
-                            Value="100" />
+                            Value="1000" />
                     </StackPanel>
                 </Grid>
             </Border>

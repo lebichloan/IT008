@@ -421,7 +421,7 @@ namespace AppMusic
 
                 listSong.ItemsSource = querAllSong.ToList();
                 lblPlaylistName.Text = "All song";
-                if(querAllSong.ToList().Count == 0)
+                if (querAllSong.ToList().Count == 0)
                 {
                     lblTotalSong.Text = "";
                 }
@@ -432,7 +432,6 @@ namespace AppMusic
             }
             else
             {
-                isShuffle = false;
                 var querAllSong = from song in musicappentities.SONGs
                                   where song.idPlaylist == idPlaylist
                                   orderby song.idSong
@@ -470,6 +469,10 @@ namespace AppMusic
                 LoadAllSong(selectedPlaylist.idPlaylist);
                 lblPlaylistName.Text = selectedPlaylist.PlaylistName;
                 lblTotalSong.Text = selectedPlaylist.TotalSong.ToString();
+            }
+            else
+            {
+                IsShuffle = false;
             }
         }
 
@@ -520,7 +523,7 @@ namespace AppMusic
         MUSICAPPEntities mUSICAPPEntities = new MUSICAPPEntities();
         private void btnAddFolder_Click(object sender, RoutedEventArgs e)
         {
-            
+
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
             dialog.InitialDirectory = "C:\\Users";
             dialog.IsFolderPicker = true;
@@ -547,11 +550,11 @@ namespace AppMusic
                     {
                         temp.SongName = tag.Title;
                         temp.Artist = tag.Artists;
-                        
+
                     }
                     else
                     {
-                        temp.SongName= System.IO.Path.GetFileNameWithoutExtension(musicFile);
+                        temp.SongName = System.IO.Path.GetFileNameWithoutExtension(musicFile);
                         temp.Artist = "";
                     }
 
@@ -609,8 +612,6 @@ namespace AppMusic
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
             IsShuffle = !IsShuffle;
-            //bool IsPlaylistShuffed = false;
-
 
             if (listPlaylist.SelectedIndex == -1)
             {
@@ -667,10 +668,10 @@ namespace AppMusic
                 }
             }
         }
-
-
-
-
-
+        private void BackwardButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            listPlaylist.SelectedIndex = -1;
+            LoadAllSong(0);
+        }
     }
 }

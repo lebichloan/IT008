@@ -396,8 +396,32 @@
                                         <Icon:PackIconMaterial Kind="SkipNext" Style="{StaticResource playerButtonIcon}" />
                                     </Button>
 
-                                    <Button x:Name="RepeatButton" Style="{StaticResource playerButton}">
-                                        <Icon:PackIconMaterial Kind="RepeatOff" Style="{StaticResource playerButtonIcon}" />
+                                    <Button x:Name="RepeatButton" Click="RepeatButton_Click">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource playerButton}">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <Icon:PackIconMaterial Kind="RepeatOff" Style="{StaticResource playerButtonIcon}" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsRepeat}" Value="True">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Icon:PackIconMaterial Kind="Repeat" Style="{StaticResource playerButtonIcon}" />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsRepeatOnce}" Value="True">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Icon:PackIconMaterial Kind="RepeatOnce" Style="{StaticResource playerButtonIcon}" />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
                                     </Button>
                                 </StackPanel>
                             </Grid>

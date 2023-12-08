@@ -44,6 +44,11 @@ namespace AppMusic
         private DispatcherTimer timer;
         private bool isShuffle = false;
         public bool IsShuffle { get { return isShuffle; } set { isShuffle = value; OnPropertyChanged(nameof(IsShuffle)); } }
+        private bool isRepeat = false;
+        public bool IsRepeat { get { return isRepeat; } set { isRepeat = value; OnPropertyChanged(nameof(IsRepeat)); } }
+        private bool isRepeatOnce = false;
+        public bool IsRepeatOnce { get { return isRepeatOnce; } set { isRepeatOnce = value; OnPropertyChanged(nameof(IsRepeatOnce)); } }
+
 
 
         public string PlayTiming
@@ -73,9 +78,29 @@ namespace AppMusic
         private void OnMediaEnded(object sender, EventArgs e)
         {
             //throw new NotImplementedException();
-            if (listSong.SelectedIndex < listSong.Items.Count - 1)
+            if (IsRepeat && !IsRepeatOnce)
             {
-                listSong.SelectedIndex++;
+                if (listSong.SelectedIndex < listSong.Items.Count - 1)
+                {
+                    listSong.SelectedIndex++;
+                    SONG song = (SONG)listSong.SelectedItem;
+                    MediaPlayerManager.filePath = song.FilePath;
+                    MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                    tblNameSongPlaying.Text = song.SongName.ToString();
+                    tblNameArtistPlaying.Text = song.Artist.ToString();
+                }
+                else
+                {
+                    listSong.SelectedIndex = 0;
+                    SONG song = (SONG)listSong.SelectedItem;
+                    MediaPlayerManager.filePath = song.FilePath;
+                    MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                    tblNameSongPlaying.Text = song.SongName.ToString();
+                    tblNameArtistPlaying.Text = song.Artist.ToString();
+                }
+            }
+            else if (!IsRepeat && IsRepeatOnce)
+            {
                 SONG song = (SONG)listSong.SelectedItem;
                 MediaPlayerManager.filePath = song.FilePath;
                 MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
@@ -84,12 +109,15 @@ namespace AppMusic
             }
             else
             {
-                listSong.SelectedIndex = 0;
-                SONG song = (SONG)listSong.SelectedItem;
-                MediaPlayerManager.filePath = song.FilePath;
-                MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
-                tblNameSongPlaying.Text = song.SongName.ToString();
-                tblNameArtistPlaying.Text = song.Artist.ToString();
+                if (listSong.SelectedIndex < listSong.Items.Count - 1)
+                {
+                    listSong.SelectedIndex++;
+                    SONG song = (SONG)listSong.SelectedItem;
+                    MediaPlayerManager.filePath = song.FilePath;
+                    MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                    tblNameSongPlaying.Text = song.SongName.ToString();
+                    tblNameArtistPlaying.Text = song.Artist.ToString();
+                }
             }
         }
 
@@ -465,6 +493,8 @@ namespace AppMusic
             if (listPlaylist.SelectedItem != null)
             {
                 IsShuffle = false;
+                IsRepeat = false;
+                IsRepeatOnce = false;
                 var selectedPlaylist = (dynamic)listPlaylist.SelectedItem;
                 LoadAllSong(selectedPlaylist.idPlaylist);
                 lblPlaylistName.Text = selectedPlaylist.PlaylistName;
@@ -473,6 +503,8 @@ namespace AppMusic
             else
             {
                 IsShuffle = false;
+                IsRepeat = false;
+                IsRepeatOnce = false;
             }
         }
 
@@ -677,6 +709,23 @@ namespace AppMusic
         {
             listPlaylist.SelectedIndex = -1;
             LoadAllSong(0);
+        }
+
+        private void RepeatButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(IsRepeat || IsRepeatOnce))
+            {
+                IsRepeat = !IsRepeat;
+            }
+            else if (IsRepeat)
+            {
+                IsRepeatOnce = !IsRepeatOnce;
+                IsRepeat = !IsRepeat;
+            }
+            else if (IsRepeatOnce)
+            {
+                IsRepeatOnce = !IsRepeatOnce;
+            }
         }
     }
 }

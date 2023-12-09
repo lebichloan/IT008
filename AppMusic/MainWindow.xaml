@@ -128,11 +128,13 @@
                                         Foreground="#c0e6de" />
                                 </StackPanel>
 
-                                <Grid Grid.Row="2">
+                                <Grid Grid.Row="2" Height="auto" MaxHeight="350">
                                     <ScrollViewer Margin="5" VerticalScrollBarVisibility="Hidden">
                                         <ListBox
                                             Name="listSong"
-                                            Height="350"
+                                            Height="auto" MaxHeight="340"
+                                            PreviewMouseRightButtonDown="listSong_PreviewMouseRightButtonDown"
+                                            PreviewMouseLeftButtonDown="listSong_MouseLeftButtonUp"
                                             SelectionChanged="listSong_SelectionChanged">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
@@ -179,6 +181,61 @@
                                                     </Border>
                                                 </DataTemplate>
                                             </ListBox.ItemTemplate>
+                                            <ListBox.ContextMenu>
+                                                <ContextMenu x:Name="ContextMenuListSong" IsVisibleChanged="ContextMenuListSong_IsVisibleChanged">
+                                                    <ContextMenu.Style>
+                                                        <Style TargetType="ContextMenu">
+                                                            <Setter Property="Height" Value="170"/>
+                                                            <Setter Property="Width" Value="250"/>
+                                                            <Setter Property="Background" Value="Transparent"/>
+                                                            <Setter Property="Padding" Value="0"/>
+                                                            <Setter Property="Foreground" Value="White"></Setter>
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="ContextMenu">
+                                                                        <Border Background="#575757" CornerRadius="4" >
+                                                                            <StackPanel>
+                                                                                <MenuItem Foreground="White" Margin="5 5 5 0" Height="40">
+                                                                                    <MenuItem.Header>
+                                                                                        <StackPanel Orientation="Horizontal">
+                                                                                            <Icon:PackIconMaterial Kind="Plus" Foreground="White"/>
+                                                                                            <TextBlock Text="Add to playlist" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
+                                                                                        </StackPanel>
+                                                                                    </MenuItem.Header>
+                                                                                </MenuItem>
+                                                                                <MenuItem x:Name="DeleteFromPlaylist" Foreground="White" Margin="5 0 5 0" Height="40" Click="DeleteFromPlaylist_Click">
+                                                                                    <MenuItem.Header>
+                                                                                        <StackPanel Orientation="Horizontal">
+                                                                                            <Icon:PackIconMaterial Kind="DeleteOutline" Foreground="White"/>
+                                                                                            <TextBlock Text="Remove from playlist" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
+                                                                                        </StackPanel>
+                                                                                    </MenuItem.Header>
+                                                                                </MenuItem>
+                                                                                <MenuItem x:Name="DeleteFromApp" Foreground="White" Margin="5 0 5 0" Height="40" Click="DeleteFromApp_Click">
+                                                                                    <MenuItem.Header>
+                                                                                        <StackPanel Orientation="Horizontal">
+                                                                                            <Icon:PackIconMaterial Kind="DeleteVariant" Foreground="White"/>
+                                                                                            <TextBlock Text="Remove from App" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
+                                                                                        </StackPanel>
+                                                                                    </MenuItem.Header>
+                                                                                </MenuItem>
+                                                                                <MenuItem Foreground="White" Margin="5 0 5 0" Height="40">
+                                                                                    <MenuItem.Header>
+                                                                                        <StackPanel Orientation="Horizontal">
+                                                                                            <Icon:PackIconMaterial Kind="SquareEditOutline" Foreground="White"/>
+                                                                                            <TextBlock Text="Edit song" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
+                                                                                        </StackPanel>
+                                                                                    </MenuItem.Header>
+                                                                                </MenuItem>
+                                                                            </StackPanel>
+                                                                        </Border>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </ContextMenu.Style>
+                                                </ContextMenu>
+                                            </ListBox.ContextMenu>
                                         </ListBox>
                                     </ScrollViewer>
                                 </Grid>
@@ -238,7 +295,7 @@
                         <ListBox
                             x:Name="listPlaylist"
                             Margin="0,5,0,0"
-                            SelectionChanged="listPlaylist_SelectionChanged">
+                            MouseLeftButtonUp="listPlaylist_MouseLeftButtonUp">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <Setter Property="Template">
@@ -273,6 +330,53 @@
                                         Time="{Binding TotalSong}" />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
+                            <ListBox.ContextMenu>
+                                <ContextMenu x:Name="ContextMenuListPlaylist" IsVisibleChanged="ContextMenuListPlaylist_IsVisibleChanged">
+                                    <ContextMenu.Style>
+                                        <Style TargetType="ContextMenu">
+                                            <Setter Property="Height" Value="170"/>
+                                            <Setter Property="Width" Value="250"/>
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="Padding" Value="0"/>
+                                            <Setter Property="Foreground" Value="White"></Setter>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ContextMenu">
+                                                        <Border Background="#575757" CornerRadius="4" >
+                                                            <StackPanel>
+                                                                <MenuItem Foreground="White" Margin="5 5 5 0" Height="40">
+                                                                    <MenuItem.Header>
+                                                                        <StackPanel Orientation="Horizontal">
+                                                                            <Icon:PackIconMaterial Kind="Plus" Foreground="White"/>
+                                                                            <TextBlock Text="Add song" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
+                                                                        </StackPanel>
+                                                                    </MenuItem.Header>
+                                                                </MenuItem>
+                                                                <MenuItem x:Name="DeletePlaylist" Foreground="White" Margin="5 0 5 0" Height="40" Click="DeletePlaylist_Click">
+                                                                    <MenuItem.Header>
+                                                                        <StackPanel Orientation="Horizontal">
+                                                                            <Icon:PackIconMaterial Kind="DeleteOutline" Foreground="White"/>
+                                                                            <TextBlock Text="Remove playlist" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
+                                                                        </StackPanel>
+                                                                    </MenuItem.Header>
+                                                                </MenuItem>
+                                                                <MenuItem Foreground="White" Margin="5 0 5 0" Height="40">
+                                                                    <MenuItem.Header>
+                                                                        <StackPanel Orientation="Horizontal">
+                                                                            <Icon:PackIconMaterial Kind="SquareEditOutline" Foreground="White"/>
+                                                                            <TextBlock Text="Edit playlist" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
+                                                                        </StackPanel>
+                                                                    </MenuItem.Header>
+                                                                </MenuItem>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ContextMenu.Style>
+                                </ContextMenu>
+                            </ListBox.ContextMenu>
                         </ListBox>
                     </StackPanel>
                 </Border>

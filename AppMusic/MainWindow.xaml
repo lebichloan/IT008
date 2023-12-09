@@ -116,11 +116,45 @@
                                 </StackPanel>
 
                                 <StackPanel Grid.Row="1" VerticalAlignment="Center">
-                                    <TextBlock
-                                        x:Name="lblPlaylistName"
-                                        FontSize="26"
-                                        FontWeight="Bold"
-                                        Foreground="White" />
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition></ColumnDefinition>
+                                            <ColumnDefinition></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock
+                                                x:Name="lblPlaylistName"
+                                                FontSize="26"
+                                                FontWeight="Bold"
+                                                Foreground="White" />
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="1">
+                                            <Button
+                                                Name="btnAddShufflePlaylist"
+                                                Width="200"
+                                                Height="40"
+                                                HorizontalAlignment="Right"
+                                                Click="btnAddShufflePlaylist_Clicked">
+                                                <TextBlock
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="15"
+                                                    Text="Create shuffled playlist " />
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource btnAdd}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsShuffle}" Value="False">
+                                                                <Setter Property="Button.Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </StackPanel>
+
+                                    </Grid>
                                     <TextBlock
                                         Name="lblTotalSong"
                                         FontSize="18"
@@ -229,6 +263,20 @@
                                         VerticalAlignment="Center"
                                         FontSize="15"
                                         Text="Add folder " />
+                                </Button>
+                                <Button
+                                    Name="btnAddSong"
+                                    Width="150"
+                                    Height="40"
+                                    Margin="0,10,0,0"
+                                    HorizontalAlignment="Right"
+                                    Click="btnAddSong_Click"
+                                    Style="{DynamicResource btnAdd}">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontSize="15"
+                                        Text="Add song " />
                                 </Button>
                             </StackPanel>
 

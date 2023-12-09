@@ -552,7 +552,7 @@ namespace AppMusic
             }
         }
 
-        MUSICAPPEntities mUSICAPPEntities = new MUSICAPPEntities();
+        //MUSICAPPEntities mUSICAPPEntities = new MUSICAPPEntities();
         private void btnAddFolder_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -567,8 +567,8 @@ namespace AppMusic
 
                 PLAYLIST newPlaylist = CreatePlaylist(dialog.FileName);
                 newPlaylist.idPlaylist = GetLastIdPlaylist();
-                mUSICAPPEntities.PLAYLISTs.Add(newPlaylist);
-                mUSICAPPEntities.SaveChanges();
+                musicappentities.PLAYLISTs.Add(newPlaylist);
+                musicappentities.SaveChanges();
 
 
                 string directory = dialog.FileName;
@@ -597,14 +597,14 @@ namespace AppMusic
                     temp.idPlaylist = newPlaylist.idPlaylist;
                     temp.Created = DateTime.Now;
                     temp.TotalTime = (TimeSpan)GetTotalTime(musicFile);
-                    mUSICAPPEntities.SONGs.Add(temp);
-                    mUSICAPPEntities.SaveChanges();
+                    musicappentities.SONGs.Add(temp);
+                    musicappentities.SaveChanges();
                 }
                 LoadAllPlaylist();
-                LoadAllSong(newPlaylist.idPlaylist);
+                LoadAllSong(0);
             }
             catch { }
-           
+
         }
 
         private PLAYLIST CreatePlaylist(string path)
@@ -619,7 +619,7 @@ namespace AppMusic
         private int GetLastIdPlaylist()
         {
 
-            var query = from playlist in mUSICAPPEntities.PLAYLISTs
+            var query = from playlist in musicappentities.PLAYLISTs
                         orderby playlist.idPlaylist descending
                         select new
                         {
@@ -726,6 +726,38 @@ namespace AppMusic
             {
                 IsRepeatOnce = !IsRepeatOnce;
             }
+        }
+
+        private void btnAddShufflePlaylist_Clicked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnAddSong_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Chọn một tệp tin";
+            openFileDialog.Filter = "File MP3|*.mp3";
+
+            bool? result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                var selectedFilePath = (dynamic)openFileDialog.FileName;
+                AddSong addSong = new AddSong(selectedFilePath);
+                addSong.DataReturned += addSong_DataReturned;
+                addSong.ShowDialog();
+                LoadAllSong(0);
+            }
+            else
+            {
+                MessageBox.Show("Please choose file to continue", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void addSong_DataReturned(object sender, SONG e)
+        {
+            SONG newSong = e;
+            musicappentities.SONGs.Add(newSong);
+            musicappentities.SaveChanges();
         }
     }
 }

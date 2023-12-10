@@ -162,11 +162,11 @@
                                         Foreground="#c0e6de" />
                                 </StackPanel>
 
-                                <Grid Grid.Row="2" Height="auto" MaxHeight="350">
+                                <Grid Grid.Row="2" Height="350">
                                     <ScrollViewer Margin="5" VerticalScrollBarVisibility="Hidden">
                                         <ListBox
                                             Name="listSong"
-                                            Height="auto" MaxHeight="340"
+                                            Height="340" 
                                             PreviewMouseRightButtonDown="listSong_PreviewMouseRightButtonDown"
                                             PreviewMouseLeftButtonDown="listSong_MouseLeftButtonUp"
                                             SelectionChanged="listSong_SelectionChanged">
@@ -343,6 +343,7 @@
                         <ListBox
                             x:Name="listPlaylist"
                             Margin="0,5,0,0"
+                            SelectionChanged="listPlaylist_SelectionChanged"
                             MouseLeftButtonUp="listPlaylist_MouseLeftButtonUp">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
@@ -392,7 +393,7 @@
                                                     <ControlTemplate TargetType="ContextMenu">
                                                         <Border Background="#575757" CornerRadius="4" >
                                                             <StackPanel>
-                                                                <MenuItem Foreground="White" Margin="5 5 5 0" Height="40">
+                                                                <MenuItem x:Name="AddSongToPlayList" Foreground="White" Margin="5 5 5 0" Height="40" Click="AddSongToPlayList_Click">
                                                                     <MenuItem.Header>
                                                                         <StackPanel Orientation="Horizontal">
                                                                             <Icon:PackIconMaterial Kind="Plus" Foreground="White"/>
@@ -646,7 +647,7 @@
                                 <Border
                                     Width="200"
                                     Background="#F5F4F0"
-                                    CornerRadius="10"
+                                    CornerRadius="5"
                                     Opacity="0.9" />
                                 <StackPanel>
                                     <TextBlock

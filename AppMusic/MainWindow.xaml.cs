@@ -437,11 +437,12 @@ namespace AppMusic
         MUSICAPPEntities musicappentities = new MUSICAPPEntities();
         private void LoadAllPlaylist()
         {
-            var queryallplaylist = from playlist in musicappentities.PLAYLISTs
-                                   orderby playlist.idPlaylist
-                                   select playlist;
+            //var queryallplaylist = from playlist in musicappentities.PLAYLISTs
+            //                       orderby playlist.idPlaylist
+            //                       select playlist;
+            var queryallplaylist = DataProvider.Ins.DB.PLAYLISTs.OrderBy(s => s.idPlaylist);
 
-            listPlaylist.ItemsSource = queryallplaylist.ToList();
+            listPlaylist.ItemsSource = queryallplaylist.ToArray();
         }
 
         private void LoadAllSong(int idPlaylist)
@@ -784,6 +785,7 @@ namespace AppMusic
                         s.idPlaylist = null;
                         DataProvider.Ins.DB.SaveChanges();
                         LoadAllSong(indexPlaylist);
+                        LoadAllPlaylist();
                     }
                 }
             }
@@ -820,6 +822,7 @@ namespace AppMusic
                     {
                         LoadAllSong(indexPlaylist);
                     }
+                    LoadAllPlaylist();
                 }
             }
             catch(Exception ex) 
@@ -870,6 +873,7 @@ namespace AppMusic
 
         private void DeletePlaylist_Click(object sender, RoutedEventArgs e)
         {
+            int indexPlaylistPlaying = 0;
             try 
             {
                 PLAYLIST pLAYLIST = (PLAYLIST)listPlaylist.SelectedItem;
@@ -878,9 +882,11 @@ namespace AppMusic
                     PLAYLIST playlist = DataProvider.Ins.DB.PLAYLISTs.Find(pLAYLIST.idPlaylist);
                     if(playlist != null)
                     {
+                        indexPlaylistPlaying = listPlaylist.SelectedIndex;
                         DataProvider.Ins.DB.PLAYLISTs.Remove(playlist);
                         DataProvider.Ins.DB.SaveChanges();
                         LoadAllPlaylist();
+                        LoadAllSong(indexPlaylistPlaying);
                     }
                 }
             } 
@@ -922,5 +928,41 @@ namespace AppMusic
             musicappentities.SaveChanges();
         }
 
+        private void AddSongToPlayList_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Chọn một tệp tin";
+            openFileDialog.Filter = "File MP3|*.mp3";
+
+            bool? result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                var selectedFilePath = (dynamic)openFileDialog.FileName;
+                string filepath = selectedFilePath.ToString();
+                AddSong addSong = new AddSong(selectedFilePath);
+                addSong.DataReturned += addSong_DataReturned;
+                addSong.ShowDialog();
+                if(indexPlaylistPre != -1)
+                {
+                    PLAYLIST playlist = (PLAYLIST)listPlaylist.SelectedItem;
+                    SONG song = DataProvider.Ins.DB.SONGs.FirstOrDefault(s => s.FilePath == filepath && s.idPlaylist == null);
+                    song.idPlaylist = playlist.idPlaylist;
+                    PLAYLIST playlistTrigger = DataProvider.Ins.DB.PLAYLISTs.Find(playlist.idPlaylist);
+                    playlistTrigger.TotalSong++;
+                    DataProvider.Ins.DB.SaveChanges();
+                    LoadAllSong(playlist.idPlaylist);
+                    LoadAllPlaylist();
+                }
+            }
+            else
+            {
+                //MessageBox.Show("Please choose file to continue", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void listPlaylist_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            indexPlaylistPre = listPlaylist.SelectedIndex;
+        }
     }
 }

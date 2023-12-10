@@ -107,6 +107,21 @@
                                 FontSize="15"
                                 Text="Add song " />
                 </Button>
+                <Button
+                        Name="btnAddRandomSong"
+                        Width="150"
+                        Height="40"
+                        Margin="20 0 0 0"
+                        HorizontalAlignment="Right"
+                        Click="btnAddRandomSong_Click"
+                        Style="{DynamicResource btnAdd}">
+                    <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="15"
+                                Text="Add random " />
+                </Button>
+                
             </StackPanel>
 
             <Grid Grid.Row="2" Grid.ColumnSpan="2">
@@ -177,7 +192,7 @@
                                         </StackPanel>
 
                                         <StackPanel Grid.Column="1">
-                                            <Button
+                                            <!--<Button
                                                 Name="btnAddShufflePlaylist"
                                                 Width="200"
                                                 Height="40"
@@ -197,7 +212,7 @@
                                                         </Style.Triggers>
                                                     </Style>
                                                 </Button.Style>
-                                            </Button>
+                                            </Button>-->
                                         </StackPanel>
 
                                     </Grid>

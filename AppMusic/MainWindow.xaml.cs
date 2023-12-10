@@ -698,6 +698,9 @@ namespace AppMusic
         {
             indexPlaylistPre = -1;
             listPlaylist.SelectedIndex = -1;
+            IsShuffle = false;
+            IsRepeat = false;
+            IsRepeatOnce = false;
             LoadAllSong(0);
         }
 
@@ -886,6 +889,9 @@ namespace AppMusic
                     {
                         DataProvider.Ins.DB.PLAYLISTs.Remove(playlist);
                         DataProvider.Ins.DB.SaveChanges();
+                        IsShuffle = false;
+                        IsRepeat = false;
+                        IsRepeatOnce = false;
                         LoadAllPlaylist();
                         if(indexPlaylistPre == -1)
                         {
@@ -922,6 +928,9 @@ namespace AppMusic
                 AddSong addSong = new AddSong(selectedFilePath);
                 addSong.DataReturned += addSong_DataReturned;
                 addSong.ShowDialog();
+                IsShuffle = false;
+                IsRepeat = false;
+                IsRepeatOnce = false;
                 LoadAllSong(0);
             }
             else
@@ -968,6 +977,31 @@ namespace AppMusic
             }
         }
 
-        
+        private void btnAddRandomSong_Click(object sender, RoutedEventArgs e)
+        {
+            Random rand = new Random();
+            var querAllSong = from song in musicappentities.SONGs
+                              orderby song.idSong
+                              select song;
+            var slist = querAllSong.ToList();
+            int randCount = rand.Next(1, slist.Count / 2);
+
+            var mappingList = slist;
+            List<SONG> randomList = new List<SONG>();
+
+            for (int i = 0; i < randCount; i++)
+            {
+                int index = rand.Next(randCount);
+                randomList.Add(mappingList[index]);
+                mappingList.RemoveAt(index);
+            }
+            AddRandomPlaylist addRandomPlaylist = new AddRandomPlaylist(randomList, musicappentities);
+            addRandomPlaylist.ShowDialog();
+            IsShuffle = false;
+            IsRepeat = false;
+            IsRepeatOnce = false;
+            LoadAllPlaylist();
+            LoadAllSong(0);
+        }
     }
 }

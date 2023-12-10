@@ -66,7 +66,7 @@
                 
             </Border>
             <StackPanel Grid.Row="1" Grid.ColumnSpan="3"  Orientation="Horizontal">
-                <Button Margin="60 0 0 0"
+                <Button Margin="50 0 0 0"
                         Name="btnAddPlaylist"
                         Width="150"
                         Height="40"
@@ -141,11 +141,12 @@
 
                     <Border
                         Grid.Row="1"
-                        Margin="0,20,10,0"
+                        Margin="0,20,5,0"
                         CornerRadius="10">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
                                 <GradientStop Offset="0" Color="#18c274" />
+                                <GradientStop Offset="0.5" Color="#115F27" />
                                 <GradientStop Offset="1" Color="#1A1A1A" />
                             </LinearGradientBrush>
                         </Border.Background>
@@ -290,7 +291,7 @@
                                                                     <ControlTemplate TargetType="ContextMenu">
                                                                         <Border Background="#575757" CornerRadius="4" >
                                                                             <StackPanel>
-                                                                                <MenuItem Foreground="White" Margin="5 5 5 0" Height="40">
+                                                                                <MenuItem x:Name="btnAddToPlaylist" Foreground="White" Margin="5 5 5 0" Height="40" Click="btnAddToPlaylist_Click">
                                                                                     <MenuItem.Header>
                                                                                         <StackPanel Orientation="Horizontal">
                                                                                             <Icon:PackIconMaterial Kind="Plus" Foreground="White"/>
@@ -315,11 +316,11 @@
                                                                                         </StackPanel>
                                                                                     </MenuItem.Header>
                                                                                 </MenuItem>
-                                                                                <MenuItem Foreground="White" Margin="5 0 5 0" Height="40">
+                                                                                <MenuItem x:Name="btnEditSongName" Foreground="White" Margin="5 0 5 0" Height="40" Click="btnEditSongName_Click">
                                                                                     <MenuItem.Header>
                                                                                         <StackPanel Orientation="Horizontal">
                                                                                             <Icon:PackIconMaterial Kind="SquareEditOutline" Foreground="White"/>
-                                                                                            <TextBlock Text="Edit song" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
+                                                                                            <TextBlock Text="Edit song name" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
                                                                                         </StackPanel>
                                                                                     </MenuItem.Header>
                                                                                 </MenuItem>
@@ -406,7 +407,7 @@
                                         <ContextMenu x:Name="ContextMenuListPlaylist" IsVisibleChanged="ContextMenuListPlaylist_IsVisibleChanged">
                                             <ContextMenu.Style>
                                                 <Style TargetType="ContextMenu">
-                                                    <Setter Property="Height" Value="170"/>
+                                                    <Setter Property="Height" Value="130"/>
                                                     <Setter Property="Width" Value="230"/>
                                                     <Setter Property="Background" Value="Transparent"/>
                                                     <Setter Property="Padding" Value="0"/>
@@ -432,11 +433,11 @@
                                                                                 </StackPanel>
                                                                             </MenuItem.Header>
                                                                         </MenuItem>
-                                                                        <MenuItem Foreground="White" Margin="5 0 5 0" Height="40">
+                                                                        <MenuItem x:Name="btnEditPlaylistName" Foreground="White" Margin="5 0 5 0" Height="40" Click="btnEditPlaylistName_Click">
                                                                             <MenuItem.Header>
                                                                                 <StackPanel Orientation="Horizontal">
                                                                                     <Icon:PackIconMaterial Kind="SquareEditOutline" Foreground="White"/>
-                                                                                    <TextBlock Text="Edit playlist" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
+                                                                                    <TextBlock Text="Edit playlist name" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
                                                                                 </StackPanel>
                                                                             </MenuItem.Header>
                                                                         </MenuItem>

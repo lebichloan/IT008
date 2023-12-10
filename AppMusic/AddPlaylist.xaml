@@ -66,6 +66,7 @@
                     LostFocus="txtPlaylistName_LostFocus"
                     Background="#333333"
                         Foreground="White"
+                        BorderBrush="White"
                     materialDesign:HintAssist.Hint="Playlist Name*"
                     materialDesign:TextFieldAssist.UnderlineBrush="#00a85b"
                     materialDesign:HintAssist.Foreground="#00a85b"
@@ -98,7 +99,7 @@
                                 />
 
                                 <Separator Height="1"
-                                Background="#000"
+                                Background="White"
                                 HorizontalAlignment="Left"
                                 Width="85"
                                 Margin="0 5 0 5"

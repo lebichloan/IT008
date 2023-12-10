@@ -42,8 +42,8 @@ namespace AppMusic
         private double volumePre;
         private string _playTiming;
         private DispatcherTimer timer;
-        private int indexPre;
-        private int indexPlaylistPre;
+        public int indexPre;
+        public int indexPlaylistPre;
         private bool isSelectedSong;
         private bool isShuffle = false;
         public bool IsShuffle { get { return isShuffle; } set { isShuffle = value; OnPropertyChanged(nameof(IsShuffle)); } }
@@ -435,7 +435,7 @@ namespace AppMusic
         }
 
         MUSICAPPEntities musicappentities = new MUSICAPPEntities();
-        private void LoadAllPlaylist()
+        public void LoadAllPlaylist()
         {
             //var queryallplaylist = from playlist in musicappentities.PLAYLISTs
             //                       orderby playlist.idPlaylist
@@ -445,14 +445,14 @@ namespace AppMusic
             listPlaylist.ItemsSource = queryallplaylist.ToArray();
         }
 
-        private void LoadAllSong(int idPlaylist)
+        public void LoadAllSong(int idPlaylist)
         {
             if (idPlaylist == 0)
             {
-                var querAllSong = from song in musicappentities.SONGs
-                                  orderby song.idSong
-                                  select song;
-
+                //var querAllSong = from song in musicappentities.SONGs
+                //                  orderby song.idSong
+                //                  select song;
+                var querAllSong = DataProvider.Ins.DB.SONGs.OrderBy(s => s.idSong);
                 listSong.ItemsSource = querAllSong.ToList();
                 lblPlaylistName.Text = "All song";
                 if (querAllSong.ToList().Count == 0)
@@ -466,11 +466,7 @@ namespace AppMusic
             }
             else
             {
-                var querAllSong = from song in musicappentities.SONGs
-                                  where song.idPlaylist == idPlaylist
-                                  orderby song.idSong
-                                  select song;
-
+                var querAllSong = DataProvider.Ins.DB.SONGs.Where(s => s.idPlaylist == idPlaylist).OrderBy(s => s.idSong);
                 listSong.ItemsSource = querAllSong.ToList();
             }
         }
@@ -1002,6 +998,62 @@ namespace AppMusic
             IsRepeatOnce = false;
             LoadAllPlaylist();
             LoadAllSong(0);
+        }
+
+        private void btnEditSongName_Click(object sender, RoutedEventArgs e)
+        {
+            if(listSong.SelectedItem != null)
+            {
+                SONG song = (SONG)listSong.SelectedItem;
+                if(song != null)
+                {
+                    EditNameSong editNameSong = new EditNameSong();
+                    editNameSong.txtSongName.Text = song.SongName.ToString();
+                    editNameSong.song = song;
+                    editNameSong.ShowDialog();
+                    if (song.idPlaylist != null && indexPlaylistPre != -1)
+                    {
+                        int temp = (int)song.idPlaylist;
+                        LoadAllSong(temp);
+                    }
+                    else if (indexPlaylistPre == -1)
+                    {
+                        LoadAllSong(0);
+                    }
+                }
+            }
+        }
+
+        private void btnEditPlaylistName_Click(object sender, RoutedEventArgs e)
+        {
+            if(listPlaylist.SelectedItem != null)
+            {
+                PLAYLIST playlist = (PLAYLIST)listPlaylist.SelectedItem;
+                if(playlist != null)
+                {
+                    EditPlaylistName editpPlaylistName = new EditPlaylistName();
+                    editpPlaylistName.txtPlaylistName.Text = playlist.PlaylistName.ToString();
+                    editpPlaylistName.playlist = playlist;
+                    editpPlaylistName.ShowDialog();
+                    LoadAllPlaylist();
+                    lblPlaylistName.Text = playlist.PlaylistName;
+                }
+            }
+        }
+
+        private void btnAddToPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            if(listSong.SelectedItem != null)
+            {
+                SONG song = (SONG)listSong.SelectedItem;
+                if(song != null)
+                {
+                    AllPlaylist allPlaylist = new AllPlaylist();
+                    allPlaylist.song = song;
+                    allPlaylist.ShowDialog();
+                    LoadAllPlaylist();
+                }
+            }
         }
     }
 }

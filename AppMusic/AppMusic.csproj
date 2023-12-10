@@ -281,7 +281,16 @@
     <Compile Include="AddSong.xaml.cs">
       <DependentUpon>AddSong.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AllPlaylist.xaml.cs">
+      <DependentUpon>AllPlaylist.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataProvider.cs" />
+    <Compile Include="EditNameSong.xaml.cs">
+      <DependentUpon>EditNameSong.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditPlaylistName.xaml.cs">
+      <DependentUpon>EditPlaylistName.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MediaPlayerManager.cs" />
     <Compile Include="MusicApp.Context.cs">
       <AutoGen>True</AutoGen>
@@ -326,6 +335,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="AddSong.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AllPlaylist.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditNameSong.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditPlaylistName.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

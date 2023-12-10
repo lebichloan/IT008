@@ -696,6 +696,7 @@ namespace AppMusic
         }
         private void BackwardButton_Clicked(object sender, RoutedEventArgs e)
         {
+            indexPlaylistPre = -1;
             listPlaylist.SelectedIndex = -1;
             LoadAllSong(0);
         }
@@ -873,28 +874,35 @@ namespace AppMusic
 
         private void DeletePlaylist_Click(object sender, RoutedEventArgs e)
         {
-            int indexPlaylistPlaying = 0;
+            int indexItemMouseClick = 0;
             try 
             {
                 PLAYLIST pLAYLIST = (PLAYLIST)listPlaylist.SelectedItem;
                 if (pLAYLIST != null)
                 {
+                    indexItemMouseClick = listPlaylist.SelectedIndex;
                     PLAYLIST playlist = DataProvider.Ins.DB.PLAYLISTs.Find(pLAYLIST.idPlaylist);
                     if(playlist != null)
                     {
-                        indexPlaylistPlaying = listPlaylist.SelectedIndex;
                         DataProvider.Ins.DB.PLAYLISTs.Remove(playlist);
                         DataProvider.Ins.DB.SaveChanges();
                         LoadAllPlaylist();
-                        LoadAllSong(indexPlaylistPlaying);
+                        if(indexPlaylistPre == -1)
+                        {
+                            LoadAllSong(0);
+                            indexPlaylistPre = -1;
+                        }
+                        else if(indexItemMouseClick == indexPlaylistPre)
+                        {
+                            indexPlaylistPre = -1;
+                            LoadAllSong(0);
+                        }
                     }
                 }
             } 
             catch { }
         }
-
         
-
 
         private void btnAddShufflePlaylist_Clicked(object sender, RoutedEventArgs e)
         {
@@ -960,9 +968,6 @@ namespace AppMusic
             }
         }
 
-        private void listPlaylist_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            indexPlaylistPre = listPlaylist.SelectedIndex;
-        }
+        
     }
 }

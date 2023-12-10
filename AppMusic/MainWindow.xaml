@@ -28,6 +28,7 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="90" />
             </Grid.RowDefinitions>
@@ -57,14 +58,58 @@
                         Kind="Close" />
                 </Button>
             </StackPanel>
+            
+            <StackPanel Grid.Row="1" Grid.ColumnSpan="3"  Orientation="Horizontal">
+                <Button Margin="50 0 0 0"
+                        Name="btnAddPlaylist"
+                        Width="150"
+                        Height="40"
+                        HorizontalAlignment="Right"
+                        Click="btnAddPlaylist_Click"
+                        Style="{DynamicResource btnAdd}">
+                    <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="15"
+                                Text="Add playlist " />
+                </Button>
+                <Button
+                        Name="btnAddFolder"
+                        Width="150"
+                        Height="40"
+                        Margin="20 0 0 0"
+                        HorizontalAlignment="Right"
+                        Click="btnAddFolder_Click"
+                        Style="{DynamicResource btnAdd}">
+                    <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="15"
+                                Text="Add folder " />
+                </Button>
+                <Button
+                        Name="btnAddSong"
+                        Width="150"
+                        Height="40"
+                        Margin="20 0 0 0"
+                        HorizontalAlignment="Right"
+                        Click="btnAddSong_Click"
+                        Style="{DynamicResource btnAdd}">
+                    <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="15"
+                                Text="Add song " />
+                </Button>
+            </StackPanel>
 
-            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid Grid.Row="2" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="450" />
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="0" Margin="40,40,0,0">
+                <Grid Grid.Column="0" Margin="40,0,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="45" />
                         <RowDefinition />
@@ -162,11 +207,11 @@
                                         Foreground="#c0e6de" />
                                 </StackPanel>
 
-                                <Grid Grid.Row="2" Height="350">
+                                <Grid Grid.Row="2" Height="340">
                                     <ScrollViewer Margin="5" VerticalScrollBarVisibility="Hidden">
                                         <ListBox
                                             Name="listSong"
-                                            Height="340" 
+                                            Height="330" 
                                             PreviewMouseRightButtonDown="listSong_PreviewMouseRightButtonDown"
                                             PreviewMouseLeftButtonDown="listSong_MouseLeftButtonUp"
                                             SelectionChanged="listSong_SelectionChanged">
@@ -236,6 +281,7 @@
                                                                                             <TextBlock Text="Add to playlist" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
                                                                                         </StackPanel>
                                                                                     </MenuItem.Header>
+                                                                                    
                                                                                 </MenuItem>
                                                                                 <MenuItem x:Name="DeleteFromPlaylist" Foreground="White" Margin="5 0 5 0" Height="40" Click="DeleteFromPlaylist_Click">
                                                                                     <MenuItem.Header>
@@ -281,11 +327,11 @@
                 <Border
                     Grid.Row="1"
                     Grid.Column="2"
-                    Margin="0,22,10,0"
+                    Margin="0,0,10,0"
                     Background="White"
                     CornerRadius="0 0 0 0">
 
-                    <StackPanel Margin="30,27,30,0">
+                    <StackPanel Margin="30,15,30,0">
                         <!--  Popular  -->
                         <Grid>
                             <TextBlock
@@ -294,146 +340,109 @@
                                 Style="{StaticResource titleText}"
                                 Text="All playlist" />
                             <StackPanel Grid.Row="0">
-                                <Button
-                                    Name="btnAddPlaylist"
-                                    Width="150"
-                                    Height="40"
-                                    HorizontalAlignment="Right"
-                                    Click="btnAddPlaylist_Click"
-                                    Style="{DynamicResource btnAdd}">
-                                    <TextBlock
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="15"
-                                        Text="Add playlist " />
-                                </Button>
-                                <Button
-                                    Name="btnAddFolder"
-                                    Width="150"
-                                    Height="40"
-                                    Margin="0,10,0,0"
-                                    HorizontalAlignment="Right"
-                                    Click="btnAddFolder_Click"
-                                    Style="{DynamicResource btnAdd}">
-                                    <TextBlock
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="15"
-                                        Text="Add folder " />
-                                </Button>
-                                <Button
-                                    Name="btnAddSong"
-                                    Width="150"
-                                    Height="40"
-                                    Margin="0,10,0,0"
-                                    HorizontalAlignment="Right"
-                                    Click="btnAddSong_Click"
-                                    Style="{DynamicResource btnAdd}">
-                                    <TextBlock
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="15"
-                                        Text="Add song " />
-                                </Button>
+
                             </StackPanel>
 
 
                         </Grid>
-
-                        <ListBox
-                            x:Name="listPlaylist"
-                            Margin="0,5,0,0"
-                            SelectionChanged="listPlaylist_SelectionChanged"
-                            MouseLeftButtonUp="listPlaylist_MouseLeftButtonUp">
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="ListBoxItem">
-                                                <Border Background="{TemplateBinding Background}" CornerRadius="40">
-                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter Property="Background" Value="#00a85b" />
-                                        </Trigger>
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
-                                            </MultiDataTrigger.Conditions>
-                                            <Setter Property="Background" Value="#00a85b" />
-                                        </MultiDataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <uc:PopularSong
-                                        Title="{Binding PlaylistName}"
-                                        Width="365"
-                                        FontWeight="Bold"
-                                        IsActive="{Binding isSelected}"
-                                        Time="{Binding TotalSong}" />
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                            <ListBox.ContextMenu>
-                                <ContextMenu x:Name="ContextMenuListPlaylist" IsVisibleChanged="ContextMenuListPlaylist_IsVisibleChanged">
-                                    <ContextMenu.Style>
-                                        <Style TargetType="ContextMenu">
-                                            <Setter Property="Height" Value="170"/>
-                                            <Setter Property="Width" Value="250"/>
-                                            <Setter Property="Background" Value="Transparent"/>
-                                            <Setter Property="Padding" Value="0"/>
-                                            <Setter Property="Foreground" Value="White"></Setter>
+                        <Grid Height="480">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <ListBox 
+                                        x:Name="listPlaylist"
+                                        Margin="0,5,0,0"
+                                        SelectionChanged="listPlaylist_SelectionChanged"
+                                        MouseLeftButtonUp="listPlaylist_MouseLeftButtonUp">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
                                             <Setter Property="Template">
                                                 <Setter.Value>
-                                                    <ControlTemplate TargetType="ContextMenu">
-                                                        <Border Background="#575757" CornerRadius="4" >
-                                                            <StackPanel>
-                                                                <MenuItem x:Name="AddSongToPlayList" Foreground="White" Margin="5 5 5 0" Height="40" Click="AddSongToPlayList_Click">
-                                                                    <MenuItem.Header>
-                                                                        <StackPanel Orientation="Horizontal">
-                                                                            <Icon:PackIconMaterial Kind="Plus" Foreground="White"/>
-                                                                            <TextBlock Text="Add song" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
-                                                                        </StackPanel>
-                                                                    </MenuItem.Header>
-                                                                </MenuItem>
-                                                                <MenuItem x:Name="DeletePlaylist" Foreground="White" Margin="5 0 5 0" Height="40" Click="DeletePlaylist_Click">
-                                                                    <MenuItem.Header>
-                                                                        <StackPanel Orientation="Horizontal">
-                                                                            <Icon:PackIconMaterial Kind="DeleteOutline" Foreground="White"/>
-                                                                            <TextBlock Text="Remove playlist" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
-                                                                        </StackPanel>
-                                                                    </MenuItem.Header>
-                                                                </MenuItem>
-                                                                <MenuItem Foreground="White" Margin="5 0 5 0" Height="40">
-                                                                    <MenuItem.Header>
-                                                                        <StackPanel Orientation="Horizontal">
-                                                                            <Icon:PackIconMaterial Kind="SquareEditOutline" Foreground="White"/>
-                                                                            <TextBlock Text="Edit playlist" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
-                                                                        </StackPanel>
-                                                                    </MenuItem.Header>
-                                                                </MenuItem>
-                                                            </StackPanel>
+                                                    <ControlTemplate TargetType="ListBoxItem">
+                                                        <Border Background="{TemplateBinding Background}" CornerRadius="40">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                                                         </Border>
                                                     </ControlTemplate>
                                                 </Setter.Value>
                                             </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="true">
+                                                    <Setter Property="Background" Value="#00a85b" />
+                                                </Trigger>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="Background" Value="#00a85b" />
+                                                </MultiDataTrigger>
+                                            </Style.Triggers>
                                         </Style>
-                                    </ContextMenu.Style>
-                                </ContextMenu>
-                            </ListBox.ContextMenu>
-                        </ListBox>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <uc:PopularSong
+                                            Title="{Binding PlaylistName}"
+                                            Width="345"
+                                            FontWeight="Bold"
+                                            IsActive="{Binding isSelected}"
+                                            Time="{Binding TotalSong}" />
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu x:Name="ContextMenuListPlaylist" IsVisibleChanged="ContextMenuListPlaylist_IsVisibleChanged">
+                                            <ContextMenu.Style>
+                                                <Style TargetType="ContextMenu">
+                                                    <Setter Property="Height" Value="170"/>
+                                                    <Setter Property="Width" Value="230"/>
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Setter Property="Padding" Value="0"/>
+                                                    <Setter Property="Foreground" Value="White"></Setter>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="ContextMenu">
+                                                                <Border Background="#575757" CornerRadius="4" >
+                                                                    <StackPanel>
+                                                                        <MenuItem x:Name="AddSongToPlayList" Foreground="White" Margin="5 5 5 0" Height="40" Click="AddSongToPlayList_Click">
+                                                                            <MenuItem.Header>
+                                                                                <StackPanel Orientation="Horizontal">
+                                                                                    <Icon:PackIconMaterial Kind="Plus" Foreground="White"/>
+                                                                                    <TextBlock Text="Add song" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
+                                                                                </StackPanel>
+                                                                            </MenuItem.Header>
+                                                                        </MenuItem>
+                                                                        <MenuItem x:Name="DeletePlaylist" Foreground="White" Margin="5 0 5 0" Height="40" Click="DeletePlaylist_Click">
+                                                                            <MenuItem.Header>
+                                                                                <StackPanel Orientation="Horizontal">
+                                                                                    <Icon:PackIconMaterial Kind="DeleteOutline" Foreground="White"/>
+                                                                                    <TextBlock Text="Remove playlist" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
+                                                                                </StackPanel>
+                                                                            </MenuItem.Header>
+                                                                        </MenuItem>
+                                                                        <MenuItem Foreground="White" Margin="5 0 5 0" Height="40">
+                                                                            <MenuItem.Header>
+                                                                                <StackPanel Orientation="Horizontal">
+                                                                                    <Icon:PackIconMaterial Kind="SquareEditOutline" Foreground="White"/>
+                                                                                    <TextBlock Text="Edit playlist" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0"/>
+                                                                                </StackPanel>
+                                                                            </MenuItem.Header>
+                                                                        </MenuItem>
+                                                                    </StackPanel>
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </ContextMenu.Style>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
+                                </ListBox>
+                            </ScrollViewer>
+                        </Grid>
                     </StackPanel>
                 </Border>
             </Grid>
 
             <!--  Player  -->
             <Border
-                Grid.Row="2"
+                Grid.Row="3"
                 Grid.Column="0"
                 Grid.ColumnSpan="3">
                 <Border.Background>

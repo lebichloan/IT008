@@ -64,7 +64,7 @@ namespace AppMusic
             }
             else
             {
-                MessageBox.Show("Please choose file to continue", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show("Please choose file to continue", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -87,28 +87,10 @@ namespace AppMusic
             listSongPlaylist.Add(newSong);
         }
 
-        private void btnDeleteSong_Click(object sender, RoutedEventArgs e)
-        {
-            if (listSong.SelectedItems != null)
-            {
-                listSong.Items.Remove(listSong.SelectedItems[0]);
-
-            }
-        }
+        
 
         private SongItem selectedSongItem = null;
-        private void listSong_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (listSong.SelectedItems != null)
-            {
-                //var selectedSong = (dynamic)listSong.SelectedItems[0];
-                //selectedSongItem = new SongItem(listSong.SelectedItem[0]);
-            }
-            else
-            {
-                selectedSongItem = null;
-            }
-        }
+        
 
         MUSICAPPEntities mUSICAPPEntities = new MUSICAPPEntities();
 
@@ -180,6 +162,22 @@ namespace AppMusic
             {
                 lblPlaylistName.Visibility = Visibility.Hidden;
             }
+        }
+
+        private void btnDeleteSong_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if(listSong.SelectedItem != null) 
+            {
+                listSong.Items.Remove(listSong.SelectedItem);
+                listSongExpander.IsExpanded = true;
+                lblTotalSong.Text = string.Format("Total song: {0}", listSong.Items.Count.ToString());
+            }
+        }
+
+        
+        private void listSong_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
         }
     }
 }

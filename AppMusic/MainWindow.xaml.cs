@@ -42,6 +42,9 @@ namespace AppMusic
         private double volumePre;
         private string _playTiming;
         private DispatcherTimer timer;
+        public int indexPre;
+        public int indexPlaylistPre;
+        private bool isSelectedSong;
         private bool isShuffle = false;
         public bool IsShuffle { get { return isShuffle; } set { isShuffle = value; OnPropertyChanged(nameof(IsShuffle)); } }
         private bool isRepeat = false;
@@ -73,6 +76,9 @@ namespace AppMusic
             PausePlayMusic.DataContext = MediaPlayerManager;
             PlayTiming = "0:00";
             MediaPlayerManager.MediaPlayer.MediaEnded += OnMediaEnded;
+            indexPlaylistPre = -1;
+            indexPre = -1;
+            isSelectedSong = false;
         }
 
         private void OnMediaEnded(object sender, EventArgs e)
@@ -421,7 +427,6 @@ namespace AppMusic
             LoadAllPlaylist();
             LoadAllSong(0);
         }
-
         static string FomatTimeSpan(TimeSpan time)
         {
             return time.Hours == 0
@@ -430,23 +435,24 @@ namespace AppMusic
         }
 
         MUSICAPPEntities musicappentities = new MUSICAPPEntities();
-        private void LoadAllPlaylist()
+        public void LoadAllPlaylist()
         {
-            var queryallplaylist = from playlist in musicappentities.PLAYLISTs
-                                   orderby playlist.idPlaylist
-                                   select playlist;
+            //var queryallplaylist = from playlist in musicappentities.PLAYLISTs
+            //                       orderby playlist.idPlaylist
+            //                       select playlist;
+            var queryallplaylist = DataProvider.Ins.DB.PLAYLISTs.OrderBy(s => s.idPlaylist);
 
-            listPlaylist.ItemsSource = queryallplaylist.ToList();
+            listPlaylist.ItemsSource = queryallplaylist.ToArray();
         }
 
-        private void LoadAllSong(int idPlaylist)
+        public void LoadAllSong(int idPlaylist)
         {
             if (idPlaylist == 0)
             {
-                var querAllSong = from song in musicappentities.SONGs
-                                  orderby song.idSong
-                                  select song;
-
+                //var querAllSong = from song in musicappentities.SONGs
+                //                  orderby song.idSong
+                //                  select song;
+                var querAllSong = DataProvider.Ins.DB.SONGs.OrderBy(s => s.idSong);
                 listSong.ItemsSource = querAllSong.ToList();
                 lblPlaylistName.Text = "All song";
                 if (querAllSong.ToList().Count == 0)
@@ -460,99 +466,78 @@ namespace AppMusic
             }
             else
             {
-                var querAllSong = from song in musicappentities.SONGs
-                                  where song.idPlaylist == idPlaylist
-                                  orderby song.idSong
-                                  select song;
-
+                var querAllSong = DataProvider.Ins.DB.SONGs.Where(s => s.idPlaylist == idPlaylist).OrderBy(s => s.idSong);
                 listSong.ItemsSource = querAllSong.ToList();
             }
         }
-
-        private void listSong_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (listSong.SelectedItem != null)
-                {
-                    SONG song = (SONG)listSong.SelectedItem;
-                    MediaPlayerManager.filePath = song.FilePath;
-                    MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
-                    tblNameSongPlaying.Text = song.SongName.ToString();
-                    tblNameArtistPlaying.Text = song.Artist.ToString();
-                    tblTotalTime.Text = FomatTimeSpan(song.TotalTime).ToString();
-                }
-
-            }
-            catch { }
-
-        }
-
-        private void listPlaylist_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (listPlaylist.SelectedItem != null)
-            {
-                IsShuffle = false;
-                IsRepeat = false;
-                IsRepeatOnce = false;
-                var selectedPlaylist = (dynamic)listPlaylist.SelectedItem;
-                LoadAllSong(selectedPlaylist.idPlaylist);
-                lblPlaylistName.Text = selectedPlaylist.PlaylistName;
-                lblTotalSong.Text = selectedPlaylist.TotalSong.ToString();
-            }
-            else
-            {
-                IsShuffle = false;
-                IsRepeat = false;
-                IsRepeatOnce = false;
-            }
-        }
-
         private void btnNextSong_Click(object sender, RoutedEventArgs e)
         {
-            if (listSong.SelectedIndex < listSong.Items.Count - 1)
+            try 
             {
-                listSong.SelectedIndex++;
-                SONG song = (SONG)listSong.SelectedItem;
-                MediaPlayerManager.filePath = song.FilePath;
-                MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
-                tblNameSongPlaying.Text = song.SongName.ToString();
-                tblNameArtistPlaying.Text = song.Artist.ToString();
+                if (listSong.SelectedIndex < listSong.Items.Count - 1)
+                {
+                    listSong.SelectedIndex++;
+                    SONG song = (SONG)listSong.SelectedItem;
+                    if(song != null)
+                    {
+                        MediaPlayerManager.filePath = song.FilePath;
+                        MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                        tblNameSongPlaying.Text = song.SongName.ToString();
+                        tblNameArtistPlaying.Text = song.Artist.ToString();
+                    }
+                }
+                else
+                {
+                    listSong.SelectedIndex = 0;
+                    SONG song = (SONG)listSong.SelectedItem;
+                    if (song != null)
+                    {
+                        MediaPlayerManager.filePath = song.FilePath;
+                        MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                        tblNameSongPlaying.Text = song.SongName.ToString();
+                        tblNameArtistPlaying.Text = song.Artist.ToString();
+                    }
+                }
             }
-            else
-            {
-                listSong.SelectedIndex = 0;
-                SONG song = (SONG)listSong.SelectedItem;
-                MediaPlayerManager.filePath = song.FilePath;
-                MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
-                tblNameSongPlaying.Text = song.SongName.ToString();
-                tblNameArtistPlaying.Text = song.Artist.ToString();
-            }
+            
+            catch { }
+            
         }
 
         private void btnPreviousSong_Click(object sender, RoutedEventArgs e)
         {
-            if (listSong.SelectedIndex > 0)
+            try 
             {
-                listSong.SelectedIndex--;
-                SONG song = (SONG)listSong.SelectedItem;
-                MediaPlayerManager.filePath = song.FilePath;
-                MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
-                tblNameSongPlaying.Text = song.SongName.ToString();
-                tblNameArtistPlaying.Text = song.Artist.ToString();
+                if (listSong.SelectedIndex > 0)
+                {
+                    listSong.SelectedIndex--;
+                    SONG song = (SONG)listSong.SelectedItem;
+                    if(song != null)
+                    {
+                        MediaPlayerManager.filePath = song.FilePath;
+                        MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                        tblNameSongPlaying.Text = song.SongName.ToString();
+                        tblNameArtistPlaying.Text = song.Artist.ToString();
+                    }
+                }
+                else
+                {
+                    listSong.SelectedIndex = listSong.Items.Count - 1;
+                    SONG song = (SONG)listSong.SelectedItem;
+                    if(song != null )
+                    {
+                        MediaPlayerManager.filePath = song.FilePath;
+                        MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                        tblNameSongPlaying.Text = song.SongName.ToString();
+                        tblNameArtistPlaying.Text = song.Artist.ToString();
+                    }
+                }
             }
-            else
-            {
-                listSong.SelectedIndex = listSong.Items.Count - 1;
-                SONG song = (SONG)listSong.SelectedItem;
-                MediaPlayerManager.filePath = song.FilePath;
-                MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
-                tblNameSongPlaying.Text = song.SongName.ToString();
-                tblNameArtistPlaying.Text = song.Artist.ToString();
-            }
+            catch { }
+            
         }
 
-        MUSICAPPEntities mUSICAPPEntities = new MUSICAPPEntities();
+        //MUSICAPPEntities mUSICAPPEntities = new MUSICAPPEntities();
         private void btnAddFolder_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -580,8 +565,8 @@ namespace AppMusic
 
                 PLAYLIST newPlaylist = CreatePlaylist(dialog.FileName);
                 newPlaylist.idPlaylist = GetLastIdPlaylist();
-                mUSICAPPEntities.PLAYLISTs.Add(newPlaylist);
-                mUSICAPPEntities.SaveChanges();
+                musicappentities.PLAYLISTs.Add(newPlaylist);
+                musicappentities.SaveChanges();
 
 
                 string directory = dialog.FileName;
@@ -610,15 +595,13 @@ namespace AppMusic
                     temp.idPlaylist = newPlaylist.idPlaylist;
                     temp.Created = DateTime.Now;
                     temp.TotalTime = (TimeSpan)GetTotalTime(musicFile);
-                    mUSICAPPEntities.SONGs.Add(temp);
-                    mUSICAPPEntities.SaveChanges();
+                    musicappentities.SONGs.Add(temp);
+                    musicappentities.SaveChanges();
                 }
                 LoadAllPlaylist();
-                LoadAllSong(newPlaylist.idPlaylist);
+                LoadAllSong(0);
             }
             catch { }
-            
-           
         }
 
         private PLAYLIST CreatePlaylist(string path)
@@ -633,7 +616,7 @@ namespace AppMusic
         private int GetLastIdPlaylist()
         {
 
-            var query = from playlist in mUSICAPPEntities.PLAYLISTs
+            var query = from playlist in musicappentities.PLAYLISTs
                         orderby playlist.idPlaylist descending
                         select new
                         {
@@ -721,7 +704,11 @@ namespace AppMusic
         }
         private void BackwardButton_Clicked(object sender, RoutedEventArgs e)
         {
+            indexPlaylistPre = -1;
             listPlaylist.SelectedIndex = -1;
+            IsShuffle = false;
+            IsRepeat = false;
+            IsRepeatOnce = false;
             LoadAllSong(0);
         }
 
@@ -739,6 +726,345 @@ namespace AppMusic
             else if (IsRepeatOnce)
             {
                 IsRepeatOnce = !IsRepeatOnce;
+            }
+        }
+
+        private void listSong_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (isSelectedSong)
+            {
+                try
+                {
+                    if (listSong.SelectedItem != null)
+                    {
+                        SONG song = (SONG)listSong.SelectedItem;
+                        if (song != null)
+                        {
+                            MediaPlayerManager.filePath = song.FilePath;
+                            MediaPlayerManager.PlayMusic(MediaPlayerManager.filePath);
+                            tblNameSongPlaying.Text = song.SongName.ToString();
+                            tblNameArtistPlaying.Text = song.Artist.ToString();
+                            tblTotalTime.Text = FomatTimeSpan(song.TotalTime).ToString();
+                            indexPre = listSong.SelectedIndex;
+                        }
+
+                    }
+
+                }
+                catch { }
+            }
+        }
+        private void listSong_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            isSelectedSong = false;
+        }
+        private void listSong_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            isSelectedSong = true;
+        }
+        private void ContextMenuListSong_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (!(bool)e.NewValue)
+            {
+                if (indexPre == -1)
+                {
+                    listSong.SelectedItem = null;   
+                }
+                else
+                {
+                    listSong.SelectedIndex = indexPre;
+                }
+            }
+        }
+
+        private void DeleteFromPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            int indexPlaylist = 0;
+            try 
+            {
+                SONG song = (SONG)listSong.SelectedItem;
+                if (song != null)
+                {
+                    SONG s = DataProvider.Ins.DB.SONGs.Find(song.idSong);
+                    if(s != null)
+                    {
+                        PLAYLIST playlist = DataProvider.Ins.DB.PLAYLISTs.Find(song.idPlaylist);
+                        if(playlist != null)
+                        {
+                            indexPlaylist = playlist.idPlaylist;
+                            playlist.TotalSong--;
+                        }
+                        s.idPlaylist = null;
+                        DataProvider.Ins.DB.SaveChanges();
+                        LoadAllSong(indexPlaylist);
+                        LoadAllPlaylist();
+                    }
+                }
+            }
+            catch { }   
+        }
+
+        private void DeleteFromApp_Click(object sender, RoutedEventArgs e)
+        {
+            int indexPlaylist = 0;
+            try 
+            {
+                SONG song = (SONG)listSong.SelectedItem;
+                if (song != null)
+                {
+                    SONG s = DataProvider.Ins.DB.SONGs.Find(song.idSong);
+                    if(s.idPlaylist != null)
+                    {
+
+                        PLAYLIST playlist = DataProvider.Ins.DB.PLAYLISTs.Find(song.idPlaylist);
+                        if (playlist != null)
+                        {
+                            indexPlaylist = playlist.idPlaylist;
+                            playlist.TotalSong--;
+                        }
+                        
+                    }
+                    DataProvider.Ins.DB.SONGs.Remove(s);
+                    DataProvider.Ins.DB.SaveChanges();
+                    if (listPlaylist.SelectedItem == null)
+                    {
+                        LoadAllSong(0);
+                    }
+                    else
+                    {
+                        LoadAllSong(indexPlaylist);
+                    }
+                    LoadAllPlaylist();
+                }
+            }
+            catch(Exception ex) 
+            {
+                MessageBox.Show("Lỗi: " + ex.Message);
+            }
+        }
+
+        private void ContextMenuListPlaylist_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (!(bool)e.NewValue)
+            {
+                if(indexPlaylistPre == -1)
+                {
+                    listPlaylist.SelectedItem = null;
+                }
+                else
+                {
+                    listPlaylist.SelectedIndex = indexPlaylistPre;
+                }
+            }
+        }
+
+        private void listPlaylist_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (listPlaylist.SelectedItem != null)
+            {
+                IsShuffle = false;
+                IsRepeat = false;
+                IsRepeatOnce = false;
+                PLAYLIST selectedPlaylist = (PLAYLIST)listPlaylist.SelectedItem;
+                if (selectedPlaylist != null)
+                {
+                    indexPlaylistPre = listPlaylist.SelectedIndex;
+                    LoadAllSong(selectedPlaylist.idPlaylist);
+                    lblPlaylistName.Text = selectedPlaylist.PlaylistName;
+                    lblTotalSong.Text = selectedPlaylist.TotalSong.ToString();
+                }
+                
+            }
+            else
+            {
+                IsShuffle = false;
+                IsRepeat = false;
+                IsRepeatOnce = false;
+            }
+        }
+
+        private void DeletePlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            int indexItemMouseClick = 0;
+            try 
+            {
+                PLAYLIST pLAYLIST = (PLAYLIST)listPlaylist.SelectedItem;
+                if (pLAYLIST != null)
+                {
+                    indexItemMouseClick = listPlaylist.SelectedIndex;
+                    PLAYLIST playlist = DataProvider.Ins.DB.PLAYLISTs.Find(pLAYLIST.idPlaylist);
+                    if(playlist != null)
+                    {
+                        DataProvider.Ins.DB.PLAYLISTs.Remove(playlist);
+                        DataProvider.Ins.DB.SaveChanges();
+                        IsShuffle = false;
+                        IsRepeat = false;
+                        IsRepeatOnce = false;
+                        LoadAllPlaylist();
+                        if(indexPlaylistPre == -1)
+                        {
+                            LoadAllSong(0);
+                            indexPlaylistPre = -1;
+                        }
+                        else if(indexItemMouseClick == indexPlaylistPre)
+                        {
+                            indexPlaylistPre = -1;
+                            LoadAllSong(0);
+                        }
+                    }
+                }
+            } 
+            catch { }
+        }
+        
+
+        private void btnAddShufflePlaylist_Clicked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnAddSong_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Chọn một tệp tin";
+            openFileDialog.Filter = "File MP3|*.mp3";
+
+            bool? result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                var selectedFilePath = (dynamic)openFileDialog.FileName;
+                AddSong addSong = new AddSong(selectedFilePath);
+                addSong.DataReturned += addSong_DataReturned;
+                addSong.ShowDialog();
+                IsShuffle = false;
+                IsRepeat = false;
+                IsRepeatOnce = false;
+                LoadAllSong(0);
+            }
+            else
+            {
+                MessageBox.Show("Please choose file to continue", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void addSong_DataReturned(object sender, SONG e)
+        {
+            SONG newSong = e;
+            musicappentities.SONGs.Add(newSong);
+            musicappentities.SaveChanges();
+        }
+
+        private void AddSongToPlayList_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Chọn một tệp tin";
+            openFileDialog.Filter = "File MP3|*.mp3";
+
+            bool? result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                var selectedFilePath = (dynamic)openFileDialog.FileName;
+                string filepath = selectedFilePath.ToString();
+                AddSong addSong = new AddSong(selectedFilePath);
+                addSong.DataReturned += addSong_DataReturned;
+                addSong.ShowDialog();
+                if(indexPlaylistPre != -1)
+                {
+                    PLAYLIST playlist = (PLAYLIST)listPlaylist.SelectedItem;
+                    SONG song = DataProvider.Ins.DB.SONGs.FirstOrDefault(s => s.FilePath == filepath && s.idPlaylist == null);
+                    song.idPlaylist = playlist.idPlaylist;
+                    PLAYLIST playlistTrigger = DataProvider.Ins.DB.PLAYLISTs.Find(playlist.idPlaylist);
+                    playlistTrigger.TotalSong++;
+                    DataProvider.Ins.DB.SaveChanges();
+                    LoadAllSong(playlist.idPlaylist);
+                    LoadAllPlaylist();
+                }
+            }
+            else
+            {
+                //MessageBox.Show("Please choose file to continue", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void btnAddRandomSong_Click(object sender, RoutedEventArgs e)
+        {
+            Random rand = new Random();
+            var querAllSong = from song in musicappentities.SONGs
+                              orderby song.idSong
+                              select song;
+            var slist = querAllSong.ToList();
+            int randCount = rand.Next(1, slist.Count / 2);
+
+            var mappingList = slist;
+            List<SONG> randomList = new List<SONG>();
+
+            for (int i = 0; i < randCount; i++)
+            {
+                int index = rand.Next(randCount);
+                randomList.Add(mappingList[index]);
+                mappingList.RemoveAt(index);
+            }
+            AddRandomPlaylist addRandomPlaylist = new AddRandomPlaylist(randomList, musicappentities);
+            addRandomPlaylist.ShowDialog();
+            IsShuffle = false;
+            IsRepeat = false;
+            IsRepeatOnce = false;
+            LoadAllPlaylist();
+            LoadAllSong(0);
+        }
+
+        private void btnEditSongName_Click(object sender, RoutedEventArgs e)
+        {
+            if(listSong.SelectedItem != null)
+            {
+                SONG song = (SONG)listSong.SelectedItem;
+                if(song != null)
+                {
+                    EditNameSong editNameSong = new EditNameSong();
+                    editNameSong.txtSongName.Text = song.SongName.ToString();
+                    editNameSong.song = song;
+                    editNameSong.ShowDialog();
+                    if (song.idPlaylist != null && indexPlaylistPre != -1)
+                    {
+                        int temp = (int)song.idPlaylist;
+                        LoadAllSong(temp);
+                    }
+                    else if (indexPlaylistPre == -1)
+                    {
+                        LoadAllSong(0);
+                    }
+                }
+            }
+        }
+
+        private void btnEditPlaylistName_Click(object sender, RoutedEventArgs e)
+        {
+            if(listPlaylist.SelectedItem != null)
+            {
+                PLAYLIST playlist = (PLAYLIST)listPlaylist.SelectedItem;
+                if(playlist != null)
+                {
+                    EditPlaylistName editpPlaylistName = new EditPlaylistName();
+                    editpPlaylistName.txtPlaylistName.Text = playlist.PlaylistName.ToString();
+                    editpPlaylistName.playlist = playlist;
+                    editpPlaylistName.ShowDialog();
+                    LoadAllPlaylist();
+                    lblPlaylistName.Text = playlist.PlaylistName;
+                }
+            }
+        }
+
+        private void btnAddToPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            if(listSong.SelectedItem != null)
+            {
+                SONG song = (SONG)listSong.SelectedItem;
+                if(song != null)
+                {
+                    AllPlaylist allPlaylist = new AllPlaylist();
+                    allPlaylist.song = song;
+                    allPlaylist.ShowDialog();
+                    LoadAllPlaylist();
+                }
             }
         }
     }

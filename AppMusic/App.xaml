@@ -636,7 +636,7 @@
                 <Setter Property="Height" Value="28"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
-                <Setter Property="Foreground" Value="#878784"/>
+                <Setter Property="Foreground" Value="#F2F2F2"/>
                 <Setter Property="FontSize" Value="16"/>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
@@ -656,7 +656,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="20">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </ControlTemplate>
@@ -670,6 +670,7 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+            
         </ResourceDictionary>
 
     </Application.Resources>

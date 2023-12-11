@@ -1,0 +1,92 @@
+﻿<Window x:Class="AppMusic.AllPlaylist"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AppMusic"
+        mc:Ignorable="d"
+        xmlns:uc="clr-namespace:AppMusic.UserControls"
+        xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        Title="AllPlaylist" Height="400" Width="375"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None">
+    <Border CornerRadius="10" Background="#0D0D0D" BorderThickness="0.2" BorderBrush="#D4D4D4">
+        
+        <StackPanel Margin="10,15,10,0" >
+            <DockPanel FlowDirection="LeftToRight">
+                <TextBlock
+                            Margin="0,0,0,10"
+                            FontSize="28"
+                            Foreground="#F0F0F0"
+                            Style="{StaticResource titleText}"
+                            Text="Choose playlist" />
+                <Button x:Name="btnClose"
+                    Click="btnClose_Click"
+                    BorderThickness="0"
+                    Style="{StaticResource closeWindowButton}"
+                    Width="25"
+                    Height="25"
+                    Background="#0D0D0D"
+                    IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="5 10 5 0"
+                    Padding="0"
+                    Grid.Row="0"
+                    Foreground="White">
+                    <Button.Content>
+                        <Icon:PackIconMaterial Kind="Close"/>
+                    </Button.Content>
+                </Button>
+            </DockPanel>
+        <Border Height="320" CornerRadius="10" Background="#1A1A1A" Padding="10" Margin="0 5 0 0">
+            <ScrollViewer VerticalScrollBarVisibility="Disabled">
+                <ListBox 
+                    x:Name="listPlaylist"
+                    Margin="0,5,0,0"
+                    MouseLeftButtonUp="listPlaylist_MouseLeftButtonUp">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="Background" Value="Transparent" />
+                                </Trigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Background" Value="Transparent" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <uc:PopularSong
+                                    Title="{Binding PlaylistName}"
+                                    Width="300"
+                                    Height="50"
+                                    FontSize="13"
+                                    FontWeight="Bold"
+                                    IsActive="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
+                                    Time="{Binding TotalSong}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+        </Border>
+    </StackPanel>
+    </Border>
+</Window>

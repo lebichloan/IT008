@@ -550,6 +550,19 @@ namespace AppMusic
                     MessageBox.Show("You selected: " + dialog.FileName);
                 }
 
+                if (Directory.GetFiles(dialog.FileName, "*.mp3").Length <= 0)
+                {
+                    var Result = MessageBox.Show("This folder has no .mp3 file! Do you want to proceed?", "Folder has no mp3 file", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (Result == MessageBoxResult.Yes)
+                    {
+
+                    }
+                    else if (Result == MessageBoxResult.No)
+                    {
+                        return;
+                    }
+                }
+
                 PLAYLIST newPlaylist = CreatePlaylist(dialog.FileName);
                 newPlaylist.idPlaylist = GetLastIdPlaylist();
                 musicappentities.PLAYLISTs.Add(newPlaylist);
@@ -589,7 +602,6 @@ namespace AppMusic
                 LoadAllSong(0);
             }
             catch { }
-
         }
 
         private PLAYLIST CreatePlaylist(string path)

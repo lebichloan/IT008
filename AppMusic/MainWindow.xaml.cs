@@ -797,6 +797,12 @@ namespace AppMusic
                         s.idPlaylist = null;
                         DataProvider.Ins.DB.SaveChanges();
                         LoadAllSong(indexPlaylist);
+                        listPlaylist.SelectedIndex = indexPlaylist - 1;
+                        lblPlaylistName.Text = playlist.PlaylistName;
+                        lblTotalSong.Text = playlist.TotalSong.ToString();
+                        IsShuffle = false;
+                        IsRepeat = false;
+                        IsRepeatOnce = false;
                         LoadAllPlaylist();
                     }
                 }
@@ -992,14 +998,23 @@ namespace AppMusic
                               orderby song.idSong
                               select song;
             var slist = querAllSong.ToList();
-            int randCount = rand.Next(1, slist.Count / 2);
+            int listCount = slist.Count;
+            int randCount;
+            if (listCount == 1)
+            {
+                randCount = 1;
+            }
+            else
+            {
+                randCount = rand.Next(1, listCount);
+            }
 
-            var mappingList = slist;
+            List<SONG> mappingList = new List<SONG>(slist);
             List<SONG> randomList = new List<SONG>();
 
             for (int i = 0; i < randCount; i++)
             {
-                int index = rand.Next(randCount);
+                int index = rand.Next(mappingList.Count);
                 randomList.Add(mappingList[index]);
                 mappingList.RemoveAt(index);
             }

@@ -3,13 +3,13 @@
 
 ## 1. Contributors:
 
- Leader: 
+### Leader: 
  * Lê Thị Bích Loan - 21521083 - https://github.com/lebichloan
- Member: 
+### Member: 
 * Phạm Hoàng Duy – 22520339 - https://github.com/hdpiscoding
 * Huỳnh Nhựt Trí – 22521519 - https://github.com/trihuynhnhut0107
 * Bùi Thái Hoàng – 22520456 - https://github.com/BTH260704
-Supervisors:
+### Supervisors:
 
 * KS.Vũ Tuấn Hải - Khoa Công nghệ phần mềm, Trường ĐH Công nghệ thông tin - ĐHQGHCM - https://github.com/vutuanhai237
 

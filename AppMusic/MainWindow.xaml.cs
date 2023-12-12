@@ -547,7 +547,7 @@ namespace AppMusic
                 dialog.IsFolderPicker = true;
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    MessageBox.Show("You selected: " + dialog.FileName);
+                    
                 }
 
                 if (Directory.GetFiles(dialog.FileName, "*.mp3").Length <= 0)

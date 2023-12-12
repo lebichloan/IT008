@@ -71,7 +71,6 @@ namespace AppMusic
                 {
                     txtSongName.Text = tag.Title;
                     txtArtist.Text = tag.Artists;
-                    MessageBox.Show("Album: " + tag.Album);
                 }
                 else
                 {

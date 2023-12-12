@@ -45,23 +45,20 @@ namespace AppMusic
         }
         public static void PlayMusic(string filePath)
         {
-            if (Directory.Exists(filePath))
-            {
+            
                 if (MediaPlayer != null) 
                 {
-                
+                    if (File.Exists(filePath))
+                    {
                     IsPlaying = true;
                     MediaPlayer.Open(new Uri(filePath, UriKind.Relative));
                     MediaPlayer.Play();
-                }
-                
-                
-            }
-            else
-            {
-                MessageBox.Show("File không tồn tại");
-
-            }
+                    }
+                    else
+                    {
+                    MessageBox.Show("File không tồn tại");
+                    }}
+            
         }
     }
 }

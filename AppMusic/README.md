@@ -31,6 +31,5 @@ Music App là một ứng dụng dùng để tạo playlist, chơi nhạc từ f
 * Bước 3 : Sửa tên local database từ BUDDY\SQLEXPRESS sang local database của bạn bên trong file app.config.
 
 ## 4. Video demo: 
-Link to youtube video
-
+* Link video: https://www.youtube.com/watch?v=BJKWxrHUsZI
 

@@ -239,7 +239,7 @@
                                                         <TextBlock
                                                             Grid.Column="2"
                                                             Margin="20,0,5,2"
-                                                            HorizontalAlignment="Center"
+                                                            HorizontalAlignment="Left"
                                                             FontSize="16"
                                                             FontWeight="SemiBold"
                                                             Foreground="White"

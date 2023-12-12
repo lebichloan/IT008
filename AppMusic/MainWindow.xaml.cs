@@ -1036,6 +1036,14 @@ namespace AppMusic
                 {
                     EditNameSong editNameSong = new EditNameSong();
                     editNameSong.txtSongName.Text = song.SongName.ToString();
+                    if(song.Artist != null)
+                    {
+                        editNameSong.txtArtistName.Text = song.Artist.ToString();
+                    }
+                    else
+                    {
+                        editNameSong.txtArtistName.Text = "";
+                    }
                     editNameSong.song = song;
                     editNameSong.ShowDialog();
                     if (song.idPlaylist != null && indexPlaylistPre != -1)

@@ -48,6 +48,7 @@ namespace AppMusic
             {
                 SONG s = DataProvider.Ins.DB.SONGs.Find(song.idSong);
                 s.SongName = txtSongName.Text;
+                s.Artist = txtArtistName.Text;
                 DataProvider.Ins.DB.SaveChanges();
                 this.Close();
             }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using NAudio.Wave;
 
@@ -43,10 +45,22 @@ namespace AppMusic
         }
         public static void PlayMusic(string filePath)
         {
-            if(MediaPlayer != null) { 
-                IsPlaying = true;
-                MediaPlayer.Open(new Uri(filePath, UriKind.Relative));
-                MediaPlayer.Play();
+            if (Directory.Exists(filePath))
+            {
+                if (MediaPlayer != null) 
+                {
+                
+                    IsPlaying = true;
+                    MediaPlayer.Open(new Uri(filePath, UriKind.Relative));
+                    MediaPlayer.Play();
+                }
+                
+                
+            }
+            else
+            {
+                MessageBox.Show("File không tồn tại");
+
             }
         }
     }

@@ -101,7 +101,7 @@ namespace AppMusic
             }
             else
             {
-                lblSongName.Text = "Song name is requried";
+                lblSongName.Text = "Song name is required";
                 lblSongName.Visibility = Visibility.Visible;
                 txtSongName.Focus();
             }

@@ -26,15 +26,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Ellipse Width="40" Height="40" Margin="0 0 20 0">
-                <Ellipse.Fill>
-                    <ImageBrush ImageSource="{Binding ElementName=popularSong,Path=Image}"/>
-                </Ellipse.Fill>
-            </Ellipse>
-
             <TextBlock Text="{Binding ElementName=popularSong,Path=Title}" FontSize="16" FontWeight="SemiBold" 
                        Grid.Column="1" 
-                       VerticalAlignment="Center" Margin="0 0 0 2">
+                       VerticalAlignment="Center" Margin="10 0 10 2">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
                         <Setter Property="Foreground" Value="White"/>
@@ -51,7 +45,7 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            
+
             <TextBlock Text="{Binding ElementName=popularSong,Path=Time}" FontSize="14" FontWeight="SemiBold" 
                        Grid.Column="2" 
                        VerticalAlignment="Center" Margin="0 0 20 2" 

@@ -459,7 +459,7 @@
                             Height="50"
                             Margin="30,0,0,0">
                             <Ellipse.Fill>
-                                <ImageBrush ImageSource="/Images/Song/ALoi.jpg" />
+                                <ImageBrush ImageSource="/Images/logo.png" />
                             </Ellipse.Fill>
                         </Ellipse>
 

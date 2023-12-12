@@ -461,7 +461,7 @@ namespace AppMusic
                 }
                 else
                 {
-                    lblTotalSong.Text = querAllSong.ToList().Count.ToString();
+                    lblTotalSong.Text = string.Format("Total song: {0}", querAllSong.ToList().Count.ToString());
                 }
             }
             else
@@ -799,7 +799,7 @@ namespace AppMusic
                         LoadAllSong(indexPlaylist);
                         listPlaylist.SelectedIndex = indexPlaylist - 1;
                         lblPlaylistName.Text = playlist.PlaylistName;
-                        lblTotalSong.Text = playlist.TotalSong.ToString();
+                        lblTotalSong.Text = string.Format("Total song: {0}", playlist.TotalSong.ToString());
                         IsShuffle = false;
                         IsRepeat = false;
                         IsRepeatOnce = false;
@@ -877,7 +877,7 @@ namespace AppMusic
                     indexPlaylistPre = listPlaylist.SelectedIndex;
                     LoadAllSong(selectedPlaylist.idPlaylist);
                     lblPlaylistName.Text = selectedPlaylist.PlaylistName;
-                    lblTotalSong.Text = selectedPlaylist.TotalSong.ToString();
+                    lblTotalSong.Text = string.Format("Total song: {0}", selectedPlaylist.TotalSong.ToString());
                 }
                 
             }

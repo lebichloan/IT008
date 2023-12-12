@@ -468,6 +468,17 @@ namespace AppMusic
             {
                 var querAllSong = DataProvider.Ins.DB.SONGs.Where(s => s.idPlaylist == idPlaylist).OrderBy(s => s.idSong);
                 listSong.ItemsSource = querAllSong.ToList();
+                var selectedPlaylist = DataProvider.Ins.DB.PLAYLISTs.Where(p => p.idPlaylist == idPlaylist);
+                var lst = selectedPlaylist.ToList();
+                lblPlaylistName.Text = lst[0].PlaylistName;
+                if (querAllSong.ToList().Count == 0)
+                {
+                    lblTotalSong.Text = "";
+                }
+                else
+                {
+                    lblTotalSong.Text = string.Format("Total song: {0}", querAllSong.ToList().Count.ToString());
+                }
             }
         }
         private void btnNextSong_Click(object sender, RoutedEventArgs e)
@@ -965,6 +976,9 @@ namespace AppMusic
             openFileDialog.Title = "Chọn một tệp tin";
             openFileDialog.Filter = "File MP3|*.mp3";
 
+            int indexItemMouseClick = 0;
+            indexItemMouseClick = listPlaylist.SelectedIndex;
+
             bool? result = openFileDialog.ShowDialog();
             if (result == true)
             {
@@ -975,6 +989,19 @@ namespace AppMusic
                 addSong.ShowDialog();
                 if(indexPlaylistPre != -1)
                 {
+                    listPlaylist.SelectedIndex = indexItemMouseClick;
+                    PLAYLIST playlist = (PLAYLIST)listPlaylist.SelectedItem;
+                    SONG song = DataProvider.Ins.DB.SONGs.FirstOrDefault(s => s.FilePath == filepath && s.idPlaylist == null);
+                    song.idPlaylist = playlist.idPlaylist;
+                    PLAYLIST playlistTrigger = DataProvider.Ins.DB.PLAYLISTs.Find(playlist.idPlaylist);
+                    playlistTrigger.TotalSong++;
+                    DataProvider.Ins.DB.SaveChanges();
+                    LoadAllSong(playlist.idPlaylist);
+                    LoadAllPlaylist();
+                }
+                else if(listPlaylist.SelectedIndex == -1)
+                {
+                    listPlaylist.SelectedIndex = indexItemMouseClick;
                     PLAYLIST playlist = (PLAYLIST)listPlaylist.SelectedItem;
                     SONG song = DataProvider.Ins.DB.SONGs.FirstOrDefault(s => s.FilePath == filepath && s.idPlaylist == null);
                     song.idPlaylist = playlist.idPlaylist;

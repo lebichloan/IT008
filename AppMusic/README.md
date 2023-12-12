@@ -49,7 +49,7 @@ Music App is an application used for making playlists, play music from existing 
 * Step 5: Enjoy the music.
 
 ## 5. Video demo: 
-* Link video: https://www.youtube.com/watch?v=BJKWxrHUsZI
+* Link video: [https://www.youtube.com/watch?v=BJKWxrHUsZI](https://www.youtube.com/watch?v=K_nmJ_NiOGo)
 
 ## 6. License
 MIT License

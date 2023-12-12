@@ -804,17 +804,17 @@ namespace AppMusic
                         {
                             indexPlaylist = playlist.idPlaylist;
                             playlist.TotalSong--;
+                            s.idPlaylist = null;
+                            DataProvider.Ins.DB.SaveChanges();
+                            LoadAllSong(indexPlaylist);
+                            listPlaylist.SelectedIndex = indexPlaylist - 1;
+                            lblPlaylistName.Text = playlist.PlaylistName;
+                            lblTotalSong.Text = string.Format("Total song: {0}", playlist.TotalSong.ToString());
+                            IsShuffle = false;
+                            IsRepeat = false;
+                            IsRepeatOnce = false;
+                            LoadAllPlaylist();
                         }
-                        s.idPlaylist = null;
-                        DataProvider.Ins.DB.SaveChanges();
-                        LoadAllSong(indexPlaylist);
-                        listPlaylist.SelectedIndex = indexPlaylist - 1;
-                        lblPlaylistName.Text = playlist.PlaylistName;
-                        lblTotalSong.Text = string.Format("Total song: {0}", playlist.TotalSong.ToString());
-                        IsShuffle = false;
-                        IsRepeat = false;
-                        IsRepeatOnce = false;
-                        LoadAllPlaylist();
                     }
                 }
             }
@@ -942,26 +942,26 @@ namespace AppMusic
 
         private void btnAddSong_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Chọn một tệp tin";
-            openFileDialog.Filter = "File MP3|*.mp3";
+            try 
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Title = "Chọn một tệp tin";
+                openFileDialog.Filter = "File MP3|*.mp3";
 
-            bool? result = openFileDialog.ShowDialog();
-            if (result == true)
-            {
-                var selectedFilePath = (dynamic)openFileDialog.FileName;
-                AddSong addSong = new AddSong(selectedFilePath);
-                addSong.DataReturned += addSong_DataReturned;
-                addSong.ShowDialog();
-                IsShuffle = false;
-                IsRepeat = false;
-                IsRepeatOnce = false;
-                LoadAllSong(0);
-            }
-            else
-            {
-                MessageBox.Show("Please choose file to continue", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+                bool? result = openFileDialog.ShowDialog();
+                if (result == true)
+                {
+                    var selectedFilePath = (dynamic)openFileDialog.FileName;
+                    AddSong addSong = new AddSong(selectedFilePath);
+                    addSong.DataReturned += addSong_DataReturned;
+                    addSong.ShowDialog();
+                    IsShuffle = false;
+                    IsRepeat = false;
+                    IsRepeatOnce = false;
+                    LoadAllSong(0);
+                }
+            } 
+            catch { }
         }
         private void addSong_DataReturned(object sender, SONG e)
         {
@@ -1012,38 +1012,42 @@ namespace AppMusic
 
         private void btnAddRandomSong_Click(object sender, RoutedEventArgs e)
         {
-            Random rand = new Random();
-            var querAllSong = from song in musicappentities.SONGs
-                              orderby song.idSong
-                              select song;
-            var slist = querAllSong.ToList();
-            int listCount = slist.Count;
-            int randCount;
-            if (listCount == 1)
+            int countSong = DataProvider.Ins.DB.SONGs.Count();
+            if(countSong > 0)
             {
-                randCount = 1;
-            }
-            else
-            {
-                randCount = rand.Next(1, listCount);
-            }
+                Random rand = new Random();
+                var querAllSong = from song in musicappentities.SONGs
+                                  orderby song.idSong
+                                  select song;
+                var slist = querAllSong.ToList();
+                int listCount = slist.Count;
+                int randCount;
+                if (listCount == 1)
+                {
+                    randCount = 1;
+                }
+                else
+                {
+                    randCount = rand.Next(1, listCount);
+                }
 
-            List<SONG> mappingList = new List<SONG>(slist);
-            List<SONG> randomList = new List<SONG>();
+                List<SONG> mappingList = new List<SONG>(slist);
+                List<SONG> randomList = new List<SONG>();
 
-            for (int i = 0; i < randCount; i++)
-            {
-                int index = rand.Next(mappingList.Count);
-                randomList.Add(mappingList[index]);
-                mappingList.RemoveAt(index);
+                for (int i = 0; i < randCount; i++)
+                {
+                    int index = rand.Next(mappingList.Count);
+                    randomList.Add(mappingList[index]);
+                    mappingList.RemoveAt(index);
+                }
+                AddRandomPlaylist addRandomPlaylist = new AddRandomPlaylist(randomList, musicappentities);
+                addRandomPlaylist.ShowDialog();
+                IsShuffle = false;
+                IsRepeat = false;
+                IsRepeatOnce = false;
+                LoadAllPlaylist();
+                LoadAllSong(0);
             }
-            AddRandomPlaylist addRandomPlaylist = new AddRandomPlaylist(randomList, musicappentities);
-            addRandomPlaylist.ShowDialog();
-            IsShuffle = false;
-            IsRepeat = false;
-            IsRepeatOnce = false;
-            LoadAllPlaylist();
-            LoadAllSong(0);
         }
 
         private void btnEditSongName_Click(object sender, RoutedEventArgs e)

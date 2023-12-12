@@ -972,50 +972,42 @@ namespace AppMusic
 
         private void AddSongToPlayList_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Chọn một tệp tin";
-            openFileDialog.Filter = "File MP3|*.mp3";
-
-            int indexItemMouseClick = 0;
-            indexItemMouseClick = listPlaylist.SelectedIndex;
-
-            bool? result = openFileDialog.ShowDialog();
-            if (result == true)
+            try
             {
-                var selectedFilePath = (dynamic)openFileDialog.FileName;
-                string filepath = selectedFilePath.ToString();
-                AddSong addSong = new AddSong(selectedFilePath);
-                addSong.DataReturned += addSong_DataReturned;
-                addSong.ShowDialog();
-                if(indexPlaylistPre != -1)
+                int indexPlaylistAddSong = listPlaylist.SelectedIndex;
+                if(indexPlaylistAddSong != -1)
                 {
-                    listPlaylist.SelectedIndex = indexItemMouseClick;
-                    PLAYLIST playlist = (PLAYLIST)listPlaylist.SelectedItem;
-                    SONG song = DataProvider.Ins.DB.SONGs.FirstOrDefault(s => s.FilePath == filepath && s.idPlaylist == null);
-                    song.idPlaylist = playlist.idPlaylist;
-                    PLAYLIST playlistTrigger = DataProvider.Ins.DB.PLAYLISTs.Find(playlist.idPlaylist);
-                    playlistTrigger.TotalSong++;
-                    DataProvider.Ins.DB.SaveChanges();
-                    LoadAllSong(playlist.idPlaylist);
-                    LoadAllPlaylist();
-                }
-                else if(listPlaylist.SelectedIndex == -1)
-                {
-                    listPlaylist.SelectedIndex = indexItemMouseClick;
-                    PLAYLIST playlist = (PLAYLIST)listPlaylist.SelectedItem;
-                    SONG song = DataProvider.Ins.DB.SONGs.FirstOrDefault(s => s.FilePath == filepath && s.idPlaylist == null);
-                    song.idPlaylist = playlist.idPlaylist;
-                    PLAYLIST playlistTrigger = DataProvider.Ins.DB.PLAYLISTs.Find(playlist.idPlaylist);
-                    playlistTrigger.TotalSong++;
-                    DataProvider.Ins.DB.SaveChanges();
-                    LoadAllSong(playlist.idPlaylist);
-                    LoadAllPlaylist();
+                    OpenFileDialog openFileDialog = new OpenFileDialog();
+                    openFileDialog.Title = "Chọn một tệp tin";
+                    openFileDialog.Filter = "File MP3|*.mp3";
+
+                    bool? result = openFileDialog.ShowDialog();
+                    if (result == true)
+                    {
+                        var selectedFilePath = (dynamic)openFileDialog.FileName;
+                        string filepath = selectedFilePath.ToString();
+                        AddSong addSong = new AddSong(selectedFilePath);
+                        addSong.DataReturned += addSong_DataReturned;
+                        addSong.ShowDialog();
+                        PLAYLIST playlist = (PLAYLIST)listPlaylist.Items[indexPlaylistAddSong];
+                        SONG song = DataProvider.Ins.DB.SONGs.OrderByDescending(s => s.idSong).FirstOrDefault(s => s.FilePath == filepath && s.idPlaylist == null);
+                        if (song != null)
+                        {
+                            song.idPlaylist = playlist.idPlaylist;
+                            PLAYLIST playlistTrigger = DataProvider.Ins.DB.PLAYLISTs.Find(playlist.idPlaylist);
+                            playlistTrigger.TotalSong++;
+                            DataProvider.Ins.DB.SaveChanges();
+                            if (indexPlaylistPre == indexPlaylistAddSong)
+                            {
+                                LoadAllSong(playlist.idPlaylist);
+                            }
+                            LoadAllPlaylist();
+                        }
+                        
+                    }
                 }
             }
-            else
-            {
-                //MessageBox.Show("Please choose file to continue", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            catch { }
         }
 
         private void btnAddRandomSong_Click(object sender, RoutedEventArgs e)
